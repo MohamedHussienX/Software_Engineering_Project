@@ -1,4 +1,5 @@
 CREATE SCHEMA IF NOT EXISTS Project;
+//COMMENT GIT HUB WORKS 
 
 CREATE TABLE Project.Categories (
     categoryID serial PRIMARY KEY,
