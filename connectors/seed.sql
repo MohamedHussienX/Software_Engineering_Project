@@ -10,7 +10,7 @@ VALUES
 ('Textile'),
 ('Aerospace'),
 ('Chemical');
-
+//COMMENT HERE 
 INSERT INTO Project.Suppliers (supplierName, contactInfo, address)
 VALUES
 ('Supplier A', 'contact@supplierA.com', '123 Main St, City A'),
