@@ -1,5 +1,6 @@
 // import the knex library that will allow us to
 // construct SQL statements
+//ana l3ebt fel password-fahmy
 const knex = require('knex');
 const config = {
   client: 'pg',
@@ -7,7 +8,7 @@ const config = {
     host : 'localhost',
     port : 5432,
     user : 'postgres',
-    password : '123',
+    password : '456',
     database : 'postgres'
   }
 };
