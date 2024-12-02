@@ -1,4 +1,4 @@
--- This is a test to see if our repo is protected.
+-- This is a test to see if our repo is protected. YES IT IS
 INSERT INTO Project.Categories (categoryName)
 VALUES
 ('Mechanical'),
