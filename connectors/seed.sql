@@ -1,3 +1,4 @@
+-- This is a test to see if our repo is protected.
 INSERT INTO Project.Categories (categoryName)
 VALUES
 ('Mechanical'),
