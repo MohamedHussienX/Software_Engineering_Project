@@ -17,3 +17,5 @@ const db = knex(config);
 // expose the created connection so we can
 // use it in other files to make sql statements
 module.exports = db;
+//ban wala ehh
+// rana
