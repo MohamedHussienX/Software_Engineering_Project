@@ -1,4 +1,5 @@
 const db = require('../../connectors/db');
+const crypto = require('crypto');
 
 function handlePrivateBackendApi(app) {
   
@@ -25,18 +26,19 @@ function handlePrivateBackendApi(app) {
     }
   });
   
-  app.post("/employee/new", async (req, res) => {
+  app.post("/api/v1/users/new", async (req, res) => {
     
     try{
       console.log("req",req.body);
-      const {firstname, middlename, lastname, country, salary, birthdate } = req.body 
+      const {userId, username, email, password, role} = req.body 
+      const hashedpassword=crypto.createHash('sha256').update(password).digest('hex')
       const result = await db.raw(
-        `insert into "backendTutorial"."Employee"(firstname, middlename, lastname, country, salary , birthdate)
-          values('${firstname}', '${middlename}', '${lastname}', '${country}', ${salary}, '${birthdate}');`);
-      return res.status(200).send('new employee has successfully added')
+        `insert into "project"."users"(userID, username, email, password, role , createdAt)
+          values('${userId}', '${username}', '${email}', '${hashedpassword}',' ${role}', '${new Date().toISOString()}');`);
+      return res.status(200).send('new user has successfully added')
     }catch(err){
       console.log("eror message", err.message);
-      return res.status(400).send("failed to add new employee")
+      return res.status(400).send("failed to add new user")
     }
   
   });

@@ -6,8 +6,8 @@ async function authMiddleware(req, res, next) {
   let result = await db.raw(`select exists (
     select * 
     from information_schema.tables 
-    where table_schema = 'backendTutorial' 
-    and table_name = 'Employee');`);
+    where table_schema = 'project' 
+    and table_name = 'users');`);
   let status = result.rows[0].exists;
   if(status == false){
     return res.send("you need to create database table Employee in schema backendTutorial")
