@@ -72,3 +72,10 @@ CREATE TABLE Project.EquipmentOrders (
     FOREIGN KEY (orderID) REFERENCES Project.Orders(orderID) ON DELETE CASCADE,
     FOREIGN KEY (equipmentID) REFERENCES Project.Equipments(equipmentID) ON DELETE CASCADE
 );
+CREATE TABLE if not exists Project.Session
+(
+    "id" serial primary key,
+    "userId" integer not null,
+    "token" text not null,
+    "expiresAt" timestamp not null
+);

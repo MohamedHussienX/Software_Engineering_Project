@@ -2,6 +2,22 @@ const { v4 } = require('uuid');
 const db = require('../../connectors/db');
 
 function handlePublicBackendApi(app) {
+  app.post("/api/v1/users/new", async (req, res) => {
+    
+    try{
+      console.log("req",req.body);
+      const {userId, username, email, password, role} = req.body 
+      const hashedpassword=crypto.createHash('sha256').update(password).digest('hex')
+      const result = await db.raw(
+        `insert into "project"."users"(username, email, password, role , createdAt)
+          values('${username}', '${email}', '${hashedpassword}',' standard_user', '${new Date().toISOString()}');`);
+      return res.status(200).send('new user has successfully added')
+    }catch(err){
+      console.log("eror message", err.message);
+      return res.status(400).send("failed to add new user")
+    }
+  
+  });
 
     // Register HTTP endpoint to create new user
     app.post('/api/v1/user', async function(req, res) {
@@ -24,7 +40,7 @@ function handlePublicBackendApi(app) {
     });
 
     // Register HTTP endpoint to create new user
-    app.post('/api/v1/user/login', async function(req, res) {
+    app.post('/api/v1/users/login', async function(req, res) {
       // get users credentials from the JSON body
       const { email, password } = req.body
       if (!email) {
@@ -35,32 +51,33 @@ function handlePublicBackendApi(app) {
         // If the password is not present, return an HTTP unauthorized code
         return res.status(400).send('Password is required');
       }
+      const hashedpassword=crypto.createHash('sha256').update(req.body.password).digest('hex')
 
       // validate the provided password against the password in the database
       // if invalid, send an unauthorized code
-      let user = await db.select('*').from('backendTutorial.User').where('email', email);
+      let user = await db.select('*').from('project.users').where('email', email);
       console.log("user : : ",user)
       if (user.length == 0) {
         return res.status(400).send('user does not exist');
       }
       user = user[0];
-      if (user.password !== password) {
+      if (user.password !== hashedpassword) {
         return res.status(400).send('Password does not match');
       }
 
       // set the expiry time as 30 minutes after the current time
       const token = v4();
       const currentDateTime = new Date();
-      const expiresAt = new Date(+currentDateTime + 18000000); // expire in 3 minutes
+      const expiresAt = new Date(+currentDateTime + 18000000); // expire in 5 hours
 
       // create a session containing information about the user and expiry time
       const session = {
-        userId: user.id,
+        userId: user.userId,
         token,
         expiresAt,
       };
       try {
-        await db('backendTutorial.Session').insert(session);
+        await db('project.session').insert(session);
         // In the response, set a cookie on the client with the name "session_cookie"
         // and the value as the UUID we generated. We also set the expiration time.
         return res.cookie("session_token", token, { expires: expiresAt }).status(200).send('login successful');

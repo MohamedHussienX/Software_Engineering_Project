@@ -26,23 +26,6 @@ function handlePrivateBackendApi(app) {
     }
   });
   
-  app.post("/api/v1/users/new", async (req, res) => {
-    
-    try{
-      console.log("req",req.body);
-      const {userId, username, email, password, role} = req.body 
-      const hashedpassword=crypto.createHash('sha256').update(password).digest('hex')
-      const result = await db.raw(
-        `insert into "project"."users"(userID, username, email, password, role , createdAt)
-          values('${userId}', '${username}', '${email}', '${hashedpassword}',' ${role}', '${new Date().toISOString()}');`);
-      return res.status(200).send('new user has successfully added')
-    }catch(err){
-      console.log("eror message", err.message);
-      return res.status(400).send("failed to add new user")
-    }
-  
-  });
-  
   app.get('/employee/:id', async (req, res)=> {
     try {
       const query = `select * from "backendTutorial"."Employee" where id = ${req.params.id}`;

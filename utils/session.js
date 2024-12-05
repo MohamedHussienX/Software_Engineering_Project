@@ -33,9 +33,9 @@ async function getUser(req) {
   //   .first();
 
   const user = await db.select('*')
-    .from({ s: 'backendTutorial.Session' })
+    .from({ s: 'project.users' })
     .where('token', sessionToken)
-    .innerJoin('backendTutorial.User as u', 's.userId', 'u.id')
+    .innerJoin('project.users as u', 's.userId', 'u.userId')
     .first(); 
 
   

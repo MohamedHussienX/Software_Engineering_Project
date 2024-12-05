@@ -3,36 +3,7 @@ const {getSessionToken} = require('../utils/session');
 
 async function authMiddleware(req, res, next) {
   
-  let result = await db.raw(`select exists (
-    select * 
-    from information_schema.tables 
-    where table_schema = 'project' 
-    and table_name = 'users');`);
-  let status = result.rows[0].exists;
-  if(status == false){
-    return res.send("you need to create database table Employee in schema backendTutorial")
-  }
-
-  result = await db.raw(`select exists (
-    select * 
-    from information_schema.tables 
-    where table_schema = 'backendTutorial' 
-    and table_name = 'User');`);
-  status = result.rows[0].exists;
-  if(status == false){
-    return res.send("you need to create database table User in schema backendTutorial")
-  }
-
-  result = await db.raw(`select exists (
-    select * 
-    from information_schema.tables 
-    where table_schema = 'backendTutorial' 
-    and table_name = 'Session');`);
-  status = result.rows[0].exists;
-  if(status == false){
-    return res.send("you need to create database table Session in schema backendTutorial")
-  }
-
+  
   const sessionToken = getSessionToken(req);
   //console.log(sessionToken)
   if (!sessionToken) {
@@ -41,7 +12,7 @@ async function authMiddleware(req, res, next) {
   }
   // We then get the session of the user from our session map
   // that we set in the signinHandler
-  const userSession = await db.select('*').from('backendTutorial.Session').where('token', sessionToken).first();
+  const userSession = await db.select('*').from('project.session').where('token', sessionToken).first();
   if (!userSession) {
     console.log("user session token is not found")
     // If the session token is not present in session map, return an unauthorized error
