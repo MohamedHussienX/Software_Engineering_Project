@@ -7,7 +7,7 @@ function handlePrivateBackendApi(app) {
   
   app.get('/api/v1/users/view' , async function(req , res) {
     const u= await getUser(req)
-    if(u.role!=' admin')
+    if(u.role!='admin')
     {
      return res.status(400).send("NOT AUTHORIZED");
     }
