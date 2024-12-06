@@ -1,16 +1,17 @@
 const { v4 } = require('uuid');
 const db = require('../../connectors/db');
+const crypto = require('crypto');
 
 function handlePublicBackendApi(app) {
   app.post("/api/v1/users/new", async (req, res) => {
     
     try{
       console.log("req",req.body);
-      const {userId, username, email, password, role} = req.body 
+      const {userId, username, email, password, role='standard_user'} = req.body 
       const hashedpassword=crypto.createHash('sha256').update(password).digest('hex')
       const result = await db.raw(
         `insert into "project"."users"(username, email, password, role , createdAt)
-          values('${username}', '${email}', '${hashedpassword}',' standard_user', '${new Date().toISOString()}');`);
+          values('${username}', '${email}', '${hashedpassword}',' ${role}', '${new Date().toISOString()}');`);
       return res.status(200).send('new user has successfully added')
     }catch(err){
       console.log("eror message", err.message);
@@ -20,7 +21,7 @@ function handlePublicBackendApi(app) {
   });
 
     // Register HTTP endpoint to create new user
-    app.post('/api/v1/user', async function(req, res) {
+    app.get('/api/v1/users/view', async function(req, res) {
       // Check if user already exists in the system
       const userExists = await db.select('*').from('backendTutorial.User').where('email', req.body.email);
       console.log("UE",userExists)

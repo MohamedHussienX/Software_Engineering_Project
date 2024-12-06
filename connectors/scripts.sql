@@ -1,5 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS Project;
-//COMMENT GIT HUB WORKS 
+CREATE SCHEMA IF NOT EXISTS Project; 
 
 CREATE TABLE Project.Categories (
     categoryID serial PRIMARY KEY,
@@ -18,7 +17,7 @@ CREATE TABLE Project.Users (
     username VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    role VARCHAR(50) NOT NULL,
+    role VARCHAR(50) DEFAULT 'standard_user',
     createdAt DATE NOT NULL
 );
 
