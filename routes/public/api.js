@@ -11,7 +11,7 @@ function handlePublicBackendApi(app) {
       const hashedpassword=crypto.createHash('sha256').update(password).digest('hex')
       const result = await db.raw(
         `insert into "project"."users"(username, email, password, role , createdAt)
-          values('${username}', '${email}', '${hashedpassword}',' ${role}', '${new Date().toISOString()}');`);
+          values('${username}','${email}','${hashedpassword}','${role}','${new Date().toISOString()}');`);
       return res.status(200).send('new user has successfully added')
     }catch(err){
       console.log("eror message", err.message);

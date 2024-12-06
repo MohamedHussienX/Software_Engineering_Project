@@ -6,12 +6,12 @@ const { getUser } = require('../../utils/session');
 function handlePrivateBackendApi(app) {
   
   app.get('/api/v1/users/view' , async function(req , res) {
-    try{
-      const u= getUser(req)
-    if(u.role=="standard_user")
+    const u= await getUser(req)
+    if(u.role!=' admin')
     {
-     return  res.status(301).redirect('/');
+     return res.status(400).send("NOT AUTHORIZED");
     }
+    try{
       const result = await db.raw(`select * from project.users order by userid`);
       //console.log(`result here`,result.rows);
       return res.status(200).send(result.rows);
@@ -19,7 +19,7 @@ function handlePrivateBackendApi(app) {
       console.log("error message",err.message);
       return res.status(400).send(err.message);
     }
-  });   //HELLO
+  });   
 
   app.get('/employee/search/:countryName' , async function(req , res) {
     try{
