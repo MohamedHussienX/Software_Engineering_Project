@@ -1,11 +1,18 @@
 const db = require('../../connectors/db');
 const crypto = require('crypto');
+const { v4 } = require('uuid');
+const { getUser } = require('../../utils/session');
 
 function handlePrivateBackendApi(app) {
   
-  app.get('/employee/view' , async function(req , res) {
+  app.get('/api/v1/users/view' , async function(req , res) {
     try{
-      const result = await db.raw(`select * from "backendTutorial"."Employee" order by id`);
+      const u= getUser(req)
+    if(u.role=="standard_user")
+    {
+     return  res.status(301).redirect('/');
+    }
+      const result = await db.raw(`select * from project.users order by userid`);
       //console.log(`result here`,result.rows);
       return res.status(200).send(result.rows);
     }catch(err){

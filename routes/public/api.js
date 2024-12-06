@@ -21,7 +21,7 @@ function handlePublicBackendApi(app) {
   });
 
     // Register HTTP endpoint to create new user
-    app.get('/api/v1/users/view', async function(req, res) {
+    /*app.get('/api/v1/users/view', async function(req, res) {
       // Check if user already exists in the system
       const userExists = await db.select('*').from('backendTutorial.User').where('email', req.body.email);
       console.log("UE",userExists)
@@ -38,7 +38,7 @@ function handlePublicBackendApi(app) {
         console.log(e.message);
         return res.status(400).send('Could not register user');
       }
-    });
+    });*/
 
     // Register HTTP endpoint to create new user
     app.post('/api/v1/users/login', async function(req, res) {
@@ -66,14 +66,14 @@ function handlePublicBackendApi(app) {
         return res.status(400).send('Password does not match');
       }
 
-      // set the expiry time as 30 minutes after the current time
+      // set the expiry time as 5 hours after the current time
       const token = v4();
       const currentDateTime = new Date();
       const expiresAt = new Date(+currentDateTime + 18000000); // expire in 5 hours
 
       // create a session containing information about the user and expiry time
       const session = {
-        userId: user.userId,
+        userId: user.userid,
         token,
         expiresAt,
       };
