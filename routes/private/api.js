@@ -153,7 +153,7 @@ function handlePrivateBackendApi(app) {
       return res.status(400).send("failed to update employee");
     }
   });
-
+//M3ana
     app.delete('/api/v1/equipment/:id', async (req, res)=> {
       const u= await getUser(req)
       if(u.role!='admin')
