@@ -54,7 +54,7 @@ function handlePrivateBackendApi(app) {
                 e.status, 
                 e.location, 
                 c.categoryname, 
-                s.suppliername 
+                s.suppliername
             FROM 
                 "project"."equipments" e
             JOIN 
@@ -152,7 +152,23 @@ function handlePrivateBackendApi(app) {
       console.log("eror message", err.message);
       return res.status(400).send("failed to update employee");
     }
-  
+  });
+
+    app.delete('/api/v1/equipment/:id', async (req, res)=> {
+      const u= await getUser(req)
+      if(u.role!='admin')
+      {
+       return res.status(403).send("NOT AUTHORIZED");
+      }
+      try {
+        const x = req.params.id;
+        const query = `delete from project.equipments where equipmentID=${x}`;
+        const result = await db.raw(query);
+        return res.status(200).send("deleted succesfully");
+      } catch (err) {
+        console.log("eror message", err.message);
+        return res.status(400).send("failed to delete employee");
+      }
   });
 
   
