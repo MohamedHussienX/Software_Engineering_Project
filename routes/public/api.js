@@ -19,7 +19,7 @@ function handlePublicBackendApi(app) {
     }
   
   });
-  
+  //M3ana
   app.get('/api/v1/rating/:id', async function(req, res) {
       let equipExists = await db.select('*').from('project.ratings').where('equipmentid', req.params.id);
     let ratingarr = [];
