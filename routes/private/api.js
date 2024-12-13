@@ -5,6 +5,56 @@ const { getUser } = require('../../utils/session');
 
 function handlePrivateBackendApi(app) {
   //M3ana
+  app.post('/api/v1/order/new', async (req, res)=> {
+    const u= await getUser(req)
+    if(u.role=='admin')
+    {
+     return res.status(400).send("NOT AUTHORIZED");
+    }
+    try {
+      console.log("req",req.body); 
+          const countuser=`SELECT COUNT(*) FROM "project"."carts" WHERE userid = '${u.id}';`
+          const countusers=await db.raw(countuser)
+          console.log(countusers) 
+          const count_users=countusers.rows[0].count
+          console.log(count_users)
+          const o=`select equipmentid,quantity from "project"."carts" where userid='${u.id}' `
+          for(let i=0;i<count_users;i++){
+          const oi=await db.raw(o)
+          const oi_equipmentid=oi.rows[i].equipmentid
+          const oi_quantity=oi.rows[i].quantity
+          const originalquantity=`select quantity from "project"."equipments" where equipmentid='${oi_equipmentid}'`
+          const original_quantity=await db.raw(originalquantity)
+          const quantity=original_quantity.rows[0].quantity
+          if (!original_quantity.rows[0]) {
+            return res.status(404).send("Equipment not found");}
+          console.log(quantity)
+          if(oi_quantity>quantity)
+          {
+            return res.status(404).send("Not Enough Quantity")
+          }
+          console.log(oi)
+          const finalquantity=quantity-oi_quantity
+      const re=await db.raw(`UPDATE "project"."equipments"
+                 SET
+                 quantity='${finalquantity}'
+                 where equipmentid='${oi_equipmentid}'`)
+      const r=await db.raw(
+        `insert into "project"."equipmentorders"(equipmentid,quantity)
+          values('${oi_equipmentid}','${oi_quantity}')`
+      )    }
+      const result = await db.raw(
+        `insert into "project"."orders"(userid, date)
+          values('${u.id}','${new Date().toISOString()}');`);
+          const q=`delete from "project"."carts" where userid='${u.id}'`
+          const query=await db.raw(q)
+      return res.status(200).send('New Order Has Successfully Added')
+    } catch (err) {
+      console.log("error message", err.message);
+      return res.status(400).send("Failed To Add New Order");
+    }
+  });
+  //M3ana
   app.post("/api/v1/equipment/new", async (req, res) => {
     const u= await getUser(req)
     if(u.role!='admin')
@@ -19,7 +69,7 @@ function handlePrivateBackendApi(app) {
           values('${equipmentName}','${equipmentImgPath}','${rating}','${modelNumber}','${purchaseDate}','${quantity}','${status}','${location}');`);
       return res.status(200).send('new equipment has successfully added')
     }catch(err){
-      console.log("eror message", err.message);
+      console.log("error message", err.message);
       return res.status(400).send("failed to add new equipment")
     }
   
@@ -42,7 +92,7 @@ function handlePrivateBackendApi(app) {
           values('${u.id}','${id}','${comment}','${score}');`);
       return res.status(200).send('New rating has successfully added')
     } catch (err) {
-      console.log("eror message", err.message);
+      console.log("error message", err.message);
       return res.status(400).send("failed to add new rating");
     }
   });
@@ -64,7 +114,7 @@ function handlePrivateBackendApi(app) {
           values('${u.id}','${id}','${quantity}');`);
       return res.status(200).send('Successfully added to the cart')
     } catch (err) {
-      console.log("eror message", err.message);
+      console.log("error message", err.message);
       return res.status(400).send("Failed to add to the cart");
     }
   });
@@ -81,7 +131,7 @@ function handlePrivateBackendApi(app) {
       const result = await db.raw(query);
       return res.status(200).send('Successfully deleted from the cart')
     } catch (err) {
-      console.log("eror message", err.message);
+      console.log("error message", err.message);
       return res.status(400).send("Failed to delete from the cart");
     }
   });
@@ -222,7 +272,7 @@ function handlePrivateBackendApi(app) {
       const result = await db.raw(query);
       return res.status(200).send("deleted succesfully");
     } catch (err) {
-      console.log("eror message", err.message);
+      console.log("error message", err.message);
       return res.status(400).send("failed to delete employee");
     }
   
@@ -245,7 +295,7 @@ function handlePrivateBackendApi(app) {
       const result = await db.raw(query);
       return res.status(200).send("updated succesfully");
     } catch (err) {
-      console.log("eror message", err.message);
+      console.log("error message", err.message);
       return res.status(400).send("failed to update employee");
     }
   });
@@ -262,7 +312,7 @@ function handlePrivateBackendApi(app) {
         const result = await db.raw(query);
         return res.status(200).send("deleted succesfully");
       } catch (err) {
-        console.log("eror message", err.message);
+        console.log("error message", err.message);
         return res.status(400).send("failed to delete employee");
       }
   });
