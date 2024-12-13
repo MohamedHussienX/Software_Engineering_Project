@@ -19,32 +19,8 @@ function handlePublicBackendApi(app) {
     }
   
   });
-  //M3ana
-  app.get('/api/v1/rating/:id', async function(req, res) {
-      let equipExists = await db.select('*').from('project.ratings').where('equipmentid', req.params.id);
-    let ratingarr = [];
-      try {
-        if (equipExists.length > 0) {
-           for(let i=0;i<equipExists.length;i++) 
-           {
-          let {userid,comment, score} = equipExists[i];
-          let ratingattributes =
-          {
-            userid: userid,
-            comment: comment,
-            score: score
-          }
-          ratingarr.push(ratingattributes);
-        }
-  }
-        //console.log("Equipments ratings objects",ratingarr);
-        return res.status(200).json(ratingarr);
-      } catch (e) {
-        console.log(e.message);
-        return res.status(400).send('Could not get ratings');
-      }
-    });
-
+  
+  
     // Register HTTP endpoint to create new user
     /*app.get('/api/v1/users/view', async function(req, res) {
       // Check if user already exists in the system

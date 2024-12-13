@@ -25,6 +25,48 @@ function handlePrivateBackendApi(app) {
   
   });
   //M3ana
+  app.put('/api/v1/equipment/:id' , async (req , res) => {
+    try{
+      const u = await getUser(req);
+      if(u.role=='standard_user'){
+        return res.status(403).send("NOT AUTHORIZED");
+      }
+      const equipmentid = parseInt(req.params.id); // Explicitly convert to integer
+
+      if (!equipmentid) {
+          return res.status(400).send("Invalid equipmentid");
+      }
+      // const {equipmentid}=parseInt(req.params.id);
+      const {equipmentname, equipmentimgpath, rating, modelNumber,purchasedate,quantity,categoryid,supplierid}=req.body;
+      console.log(req.body);
+
+      const query=`UPDATE "project"."equipments"
+                 SET
+                equipmentname = '${equipmentname}',
+                equipmentimgpath = '${equipmentimgpath}',
+                rating = '${rating}',
+                modelNumber = '${modelNumber}',
+                purchasedate = '${purchasedate}',
+                quantity = '${quantity}',
+                categoryid = '${categoryid}',
+                supplierid = '${supplierid}'
+            WHERE equipmentid = '${equipmentid}' 
+            `;
+
+       const result = await db.raw(query);
+
+       if(res.rowcount===0){
+        return res.status(404).send("Equipment not found");
+       }
+       return res.status(200).send("updated successfully;");
+    }
+
+    catch(err){
+        console.log("error message",err.message);
+        return res.status(500).send("Failed to update Equipment");
+    }
+  });
+  //M3ana
   app.get('/api/v1/users/view' , async function(req , res) {
     const u= await getUser(req)
     if(u.role!='admin')
@@ -68,7 +110,33 @@ function handlePrivateBackendApi(app) {
       console.log("error message",err.message);
       return res.status(400).send(err.message);
     }
-  });   
+  }); 
+   //M3ana
+  app.get('/api/v1/rating/:id', async function(req, res) {
+    let equipExists = await db.select('*').from('project.ratings').where('equipmentid', req.params.id);
+  let ratingarr = [];
+    try {
+      if (equipExists.length > 0) {
+         for(let i=0;i<equipExists.length;i++) 
+         {
+        let {userid,comment, score} = equipExists[i];
+        let ratingattributes =
+        {
+          userid: userid,
+          comment: comment,
+          score: score
+        }
+        ratingarr.push(ratingattributes);
+      }
+}
+      //console.log("Equipments ratings objects",ratingarr);
+      return res.status(200).json(ratingarr);
+    } catch (e) {
+      console.log(e.message);
+      return res.status(400).send('Could not get ratings');
+    }
+  });
+
 
   app.get('/employee/search/:countryName' , async function(req , res) {
     try{
