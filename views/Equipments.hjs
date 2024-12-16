@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <head>
+      <link rel='stylesheet' href='/styles/bootstrap.min.css' />
+      <link rel='stylesheet' href='/styles/style.css' />
+      <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
+      <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+      <script src="/src/Equipments.js" type="text/javascript"></script>
+    </head>
+  </head>
+  <body>
+    <div>
+       <nav class="navbar navbar-inverse" style="padding-left:130px;">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li class="active"><a href="/Equipments">Equipments</a></li>
+            <li><a href="/profile">Rating</a></li>
+            <li><a href="/employee">Cart</a></li>
+          </ul>
+      </nav>
+    </div>
+
+    <div class="container">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="text-center">ID</th>
+            <th class="text-center">EquipmentName</th>
+            <th class="text-center">Image</th>
+            <th class="text-center">Rating</th>
+            <th class="text-center">Model Number</th>
+            <th class="text-center">Quantity</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Location</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+
+          {{#emp}}
+            <tr>
+               <td class="text-center">{{equipmentid}}</td>
+                <td class="text-center">{{equipmentname}}</td>
+                <td class="text-center">{{image}}</td>
+                <td class="text-center">{{rating}}</td>
+                <td class="text-center">{{modelnumber}}</td>
+                <td class="text-center">{{quantity}}</td>
+                <td class="text-center">{{status}}</td>
+                <td class="text-center">{{location}}</td>
+                <td class="text-center">
+                    <button id="{{equipmentname}}" class="btn btn-danger remove" type="button">Add To Cart</button>
+                </td>           
+            </tr>
+          {{/emp}}
+          
+        </tbody>
+      </table>
+    </div>
+
+  </body>
+</html>

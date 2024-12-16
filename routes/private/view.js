@@ -40,9 +40,17 @@ function handlePrivateFrontEndView(app) {
         return res.render('add');
     });
 
-     // create new Employee page
-     app.get('/search' , (req , res) => {    
-        return res.render('search');
+     // view equipments page
+     app.get('/Equipments' ,async (req , res) => {    
+        let result;
+        try{
+            result = await db.raw(`select * from project.equipments order by equipmentid `);
+        }catch(error){
+            console.log("error message",error.message);
+            result = error.message;
+        }
+        console.log("employee" , result);
+        return res.render('Equipments' , {emp : result.rows});
     });
 
     // profile page

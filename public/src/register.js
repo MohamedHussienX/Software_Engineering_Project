@@ -14,7 +14,7 @@ $(document).ready(function(){
 
       $.ajax({
         type: "POST",
-        url: '/api/v1/user',
+        url: '/api/v1/users/new',
         data : data,
         success: function(serverResponse) {
           if(serverResponse) {

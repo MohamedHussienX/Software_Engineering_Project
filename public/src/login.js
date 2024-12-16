@@ -10,7 +10,7 @@ $(document).ready(function(){
 
       $.ajax({
         type: "POST",
-        url: '/api/v1/user/login',
+        url: '/api/v1/users/login',
         data  ,
         success: function(serverResponse) {
           if(serverResponse) {

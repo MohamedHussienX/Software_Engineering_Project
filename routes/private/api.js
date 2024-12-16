@@ -13,12 +13,12 @@ function handlePrivateBackendApi(app) {
     }
     try {
       console.log("req",req.body); 
-          const countuser=`SELECT COUNT(*) FROM "project"."carts" WHERE userid = '${u.id}';`
+          const countuser=`SELECT COUNT(*) FROM "project"."carts" WHERE userid = '${u.userId}';`
           const countusers=await db.raw(countuser)
           console.log(countusers) 
           const count_users=countusers.rows[0].count
           console.log(count_users)
-          const o=`select equipmentid,quantity from "project"."carts" where userid='${u.id}' `
+          const o=`select equipmentid,quantity from "project"."carts" where userid='${u.userId}' `
           for(let i=0;i<count_users;i++){
           const oi=await db.raw(o)
           const oi_equipmentid=oi.rows[i].equipmentid
@@ -45,8 +45,8 @@ function handlePrivateBackendApi(app) {
       )    }
       const result = await db.raw(
         `insert into "project"."orders"(userid, date)
-          values('${u.id}','${new Date().toISOString()}');`);
-          const q=`delete from "project"."carts" where userid='${u.id}'`
+          values('${u.userId}','${new Date().toISOString()}');`);
+          const q=`delete from "project"."carts" where userid='${u.userId}'`
           const query=await db.raw(q)
       return res.status(200).send('New Order Has Successfully Added')
     } catch (err) {
@@ -89,7 +89,7 @@ function handlePrivateBackendApi(app) {
       const id=n.row[0].equipmentid
       const result = await db.raw(
         `insert into "project"."ratings"(userid, equipmentid, comment,score)
-          values('${u.id}','${id}','${comment}','${score}');`);
+          values('${u.userId}','${id}','${comment}','${score}');`);
       return res.status(200).send('New rating has successfully added')
     } catch (err) {
       console.log("error message", err.message);
@@ -111,7 +111,7 @@ function handlePrivateBackendApi(app) {
       const id=n.rows[0].equipmentid
       const result = await db.raw(
         `insert into "project"."carts"(userid, equipmentid, quantity)
-          values('${u.id}','${id}','${quantity}');`);
+          values('${u.userId}','${id}','${quantity}');`);
       return res.status(200).send('Successfully added to the cart')
     } catch (err) {
       console.log("error message", err.message);
