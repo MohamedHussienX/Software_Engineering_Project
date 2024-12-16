@@ -23,16 +23,23 @@ function handlePrivateFrontEndView(app) {
         });
 
 
-    app.get('/employee' , async (req , res) => {
+    app.get('/Cart' , async (req , res) => {
         let result;
+        const u=await getUser(req)
         try{
-            result = await db.select('*').from("backendTutorial.Employee");
+            result = await db.raw(`select 
+               "project"."carts".*,
+               "project"."equipments".equipmentname
+               from "project"."carts"
+               inner join "project"."equipments"
+               on "project"."carts".equipmentid="project"."equipments".equipmentid
+               where "project"."carts".userid=${u.userId} `);
         }catch(error){
             console.log("error message",error.message);
             result = error.message;
         }
-        console.log("employee" , result);
-        return res.render('employee' , {emp : result});
+        console.log("Cart" , result);
+        return res.render('Cart' , {emp : result.rows});
     });
 
     // create new Employee page

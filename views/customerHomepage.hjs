@@ -15,7 +15,7 @@
           <li class="active"><a href="/">Home</a></li>
           <li><a href="/Equipments">Equipment</a></li>
           <li><a href="/rating">Rating</a></li>
-          <li><a href="/cart">Cart</a></li>
+          <li><a href="/Cart">Cart</a></li>
         </ul>
       </nav>
     </div>

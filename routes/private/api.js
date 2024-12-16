@@ -42,7 +42,17 @@ function handlePrivateBackendApi(app) {
       const r=await db.raw(
         `insert into "project"."equipmentorders"(equipmentid,quantity)
           values('${oi_equipmentid}','${oi_quantity}')`
-      )    }
+      )
+      if(finalquantity==0)
+        {
+          const status=await db.raw(`update "project"."equipments"
+            set
+            status="Out Of Stock"
+            where equipmentid='${oi_equipmentid}'
+            `)
+        }  
+        }
+      
       const result = await db.raw(
         `insert into "project"."orders"(userid, date)
           values('${u.userId}','${new Date().toISOString()}');`);
@@ -104,14 +114,43 @@ function handlePrivateBackendApi(app) {
      return res.status(400).send("NOT AUTHORIZED");
     }
     try {
+      console.log("req",req.body); 
+          const countuser=`SELECT COUNT(*) FROM "project"."carts" WHERE userid = '${u.userId}';`
+          const countusers=await db.raw(countuser)
+          console.log(countusers) 
+          const count_users=countusers.rows[0].count
+          console.log(count_users)
       console.log("req",req.body);
       const {equipmentname,quantity} = req.body 
       const query=`select equipmentid from "project"."equipments" where equipmentname='${equipmentname}'`
       const n=await db.raw(query)
       const id=n.rows[0].equipmentid
+      const q=`SELECT 
+    CASE 
+        WHEN EXISTS (
+            SELECT 1 
+            FROM project.carts 
+            WHERE equipmentid = '${id}'
+            and userid='${u.userId}'
+        ) THEN 1
+        ELSE 0
+    END AS is_found;`
+        const q2=await db.raw(q)
+        const e=q2.rows[0].is_found
+        console.log(e)
+        if(e==0){
       const result = await db.raw(
         `insert into "project"."carts"(userid, equipmentid, quantity)
-          values('${u.userId}','${id}','${quantity}');`);
+          values('${u.userId}','${id}','${quantity}');`);}
+          else{
+            const x=await db.raw(`select quantity from project.carts where equipmentid='${id}' and userid='${u.userId}'`)
+      const oldquantity=x.rows[0].quantity
+            const m=await db.raw(`update project.carts
+            set
+            quantity =${quantity}+${oldquantity}
+            where equipmentid='${id}'
+            and userid='${u.userId}'`)
+          }
       return res.status(200).send('Successfully added to the cart')
     } catch (err) {
       console.log("error message", err.message);
@@ -248,18 +287,6 @@ function handlePrivateBackendApi(app) {
     }
   });
 
-
-  app.get('/employee/search/:countryName' , async function(req , res) {
-    try{
-      const query = `select * from "backendTutorial"."Employee" where country like '%${req.params.countryName}%'`;
-      const result = await db.raw(query);
-      //console.log(`result here`,result.rows);
-      return res.status(200).send(result.rows);
-    }catch(err){
-      console.log("error message",err.message);
-      return res.status(400).send(err.message);
-    }
-  });
   //M3ana
   app.delete('/api/v1/users/:id', async (req, res)=> {
     const u= await getUser(req)

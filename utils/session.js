@@ -42,23 +42,6 @@ async function getUser(req) {
   console.log('user =>', user)
   return user;  
 }
-async function getEquipment(req) {
-  // const user = await db.select('*')
-  //   .from('backendTutorial.Session')
-  //   .where('token', sessionToken)
-  //   .innerJoin('backendTutorial.User', 'backendTutorial.Session.userId', 'backendTutorial.User.id')
-  //   .first();
-
-  const user = await db.select('*')
-    .from({ s: 'project.ratings' })
-    .where('token', sessionToken)
-    .innerJoin('project.users as u', 's.userId', 'u.userid')
-    .first(); 
-
-  
-  console.log('Equipment =>', user)
-  return user;  
-}
 
 
 

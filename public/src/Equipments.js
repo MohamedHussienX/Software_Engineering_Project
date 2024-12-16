@@ -4,7 +4,10 @@ $(document).ready(function(){
     $('#tbody').on('click', '.remove', function () {
       console.log("Added To Cart");
       var equipmentname = $(this).attr("id");
-      const quantity="1"
+      let quntityid = $(this).parent().parent().attr("id")
+      let quantity = $(`#e${quntityid}`).val();
+      console.log(equipmentname)
+      console.log("Quantity:", quantity);
       data={
         equipmentname,
         quantity,
@@ -14,7 +17,7 @@ $(document).ready(function(){
       data ,
       url: '/api/v1/cart/new',
       success: function(data){
-          console.log(data);
+          console.log(`Hello ${data}`);
           alert("Added successfully");
       },
       error: function(data){

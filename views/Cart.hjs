@@ -14,9 +14,9 @@
        <nav class="navbar navbar-inverse" style="padding-left:130px;">
           <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
-            <li class="active"><a href="/Equipments">Equipments</a></li>
+            <li><a href="/Equipments">Equipments</a></li>
             <li><a href="/profile">Rating</a></li>
-            <li><a href="/Cart">Cart</a></li>
+            <li class="active"><a href="/Cart">Cart</a></li>
           </ul>
       </nav>
     </div>
@@ -25,31 +25,18 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="text-center">ID</th>
             <th class="text-center">EquipmentName</th>
-            <th class="text-center">Image</th>
-            <th class="text-center">Rating</th>
-            <th class="text-center">Model Number</th>
             <th class="text-center">Quantity</th>
-            <th class="text-center">Status</th>
-            <th class="text-center">Location</th>
           </tr>
         </thead>
         <tbody id="tbody">
 
           {{#emp}}
-            <tr id={{equipmentid}}>
-               <td class="text-center">{{equipmentid}}</td>
+            <tr>
                 <td class="text-center">{{equipmentname}}</td>
-                <td class="text-center">{{image}}</td>
-                <td class="text-center">{{rating}}</td>
-                <td class="text-center">{{modelnumber}}</td>
-                <td class="text-center">{{quantity}}</td>
-                <td class="text-center">{{status}}</td>
-                <td class="text-center">{{location}}</td>
                 <td class="text-center">
-                  <input type="text" class="form-control" id="e{{equipmentid}}" name="{{equipmentname}}" value="1">
-                    <button id="{{equipmentname}}" class="btn btn-danger remove" type="button">Add To Cart</button>
+                    <input type="int" class="form-control" id="quantity" name="quantity" value="{{quantity}}">
+                    <button id="{{equipmentname}}" class="btn btn-danger Update" type="button">Update</button>
                 </td>           
             </tr>
           {{/emp}}
