@@ -19,10 +19,12 @@ function handlePrivateBackendApi(app) {
           const count_users=countusers.rows[0].count
           console.log(count_users)
           const o=`select equipmentid,quantity from "project"."carts" where userid='${u.userId}' `
-          for(let i=0;i<count_users;i++){
           const oi=await db.raw(o)
+          for(let i=0;i<count_users;i++){
           const oi_equipmentid=oi.rows[i].equipmentid
+          console.log(oi_equipmentid)
           const oi_quantity=oi.rows[i].quantity
+          console.log(oi_quantity)
           const originalquantity=`select quantity from "project"."equipments" where equipmentid='${oi_equipmentid}'`
           const original_quantity=await db.raw(originalquantity)
           const quantity=original_quantity.rows[0].quantity
@@ -35,13 +37,21 @@ function handlePrivateBackendApi(app) {
           }
           console.log(oi)
           const finalquantity=quantity-oi_quantity
+          const result = await db.raw(
+            `insert into "project"."orders"(userid, date)
+              values('${u.userId}','${new Date().toISOString()}');`);
+              const q=`delete from "project"."carts" where userid='${u.userId}'`
+              const query=await db.raw(q)
+            const order = await db.raw(`select orderid from project.orders where userid=${u.userId}`)
+            const order2 = order.rows[0].orderid
+            console.log(order2)
       const re=await db.raw(`UPDATE "project"."equipments"
                  SET
                  quantity='${finalquantity}'
                  where equipmentid='${oi_equipmentid}'`)
       const r=await db.raw(
-        `insert into "project"."equipmentorders"(equipmentid,quantity)
-          values('${oi_equipmentid}','${oi_quantity}')`
+        `insert into "project"."equipmentorders"(orderid,equipmentid,quantity)
+          values('${order2}','${oi_equipmentid}','${oi_quantity}')`
       )
       if(finalquantity==0)
         {
@@ -51,13 +61,8 @@ function handlePrivateBackendApi(app) {
             where equipmentid='${oi_equipmentid}'
             `)
         }  
+
         }
-      
-      const result = await db.raw(
-        `insert into "project"."orders"(userid, date)
-          values('${u.userId}','${new Date().toISOString()}');`);
-          const q=`delete from "project"."carts" where userid='${u.userId}'`
-          const query=await db.raw(q)
       return res.status(200).send('New Order Has Successfully Added')
     } catch (err) {
       console.log("error message", err.message);

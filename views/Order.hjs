@@ -17,8 +17,8 @@
             <li><a href="/">Home</a></li>
             <li><a href="/Equipments">Equipments</a></li>
             <li><a href="/AddRating">AddRating</a></li>
-            <li class="active"><a href="/Cart">Cart</a></li>
-            <li><a href="/order">Order</a></li>
+            <li><a href="/Cart">Cart</a></li>
+            <li class="active"><a href="/order">Order</a></li>
           </ul>
       </nav>
     </div>

@@ -114,7 +114,33 @@ function handlePrivateFrontEndView(app) {
         return res.render('profile');
     });
 
-
+    app.get('/order' ,async (req , res) => {    
+        let result;
+        try{
+            result = await db.raw(`SELECT 
+                e.*, 
+                c.categoryname, 
+                s.suppliername
+            FROM 
+                project.equipments e
+            INNER JOIN 
+                project.categories c
+            ON 
+                e.categoryid = c.categoryid
+            INNER JOIN 
+                project.suppliers s
+            ON 
+                e.supplierid = s.supplierid
+            ORDER BY 
+                e.equipmentid
+ `);
+        }catch(error){
+            console.log("error message",error.message);
+            result = error.message;
+        }
+        console.log("Order" , result);
+        return res.render('Order', {emp : result.rows});
+    });
   
 }  
   

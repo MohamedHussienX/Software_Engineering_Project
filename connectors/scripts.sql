@@ -40,7 +40,7 @@ CREATE TABLE Project.Equipments (
 CREATE TABLE Project.Orders (
     orderID serial PRIMARY KEY,
     userID INT NOT NULL,
-    date DATE NOT NULL,
+    date timestamp NOT NULL,
     FOREIGN KEY (userID) REFERENCES Project.Users(userID) ON DELETE CASCADE
 );
 
@@ -64,7 +64,7 @@ CREATE TABLE Project.Ratings (
 );
 
 CREATE TABLE Project.EquipmentOrders (
-    orderID serial NOT NULL,
+    orderID INT NOT NULL,
     equipmentID INT NOT NULL,
     quantity INT NOT NULL,
     PRIMARY KEY (orderID, equipmentID),
