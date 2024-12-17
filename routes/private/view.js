@@ -117,22 +117,41 @@ function handlePrivateFrontEndView(app) {
     app.get('/order' ,async (req , res) => {    
         let result;
         try{
-            result = await db.raw(`SELECT 
-                e.*, 
-                c.categoryname, 
-                s.suppliername
-            FROM 
-                project.equipments e
-            INNER JOIN 
-                project.categories c
-            ON 
-                e.categoryid = c.categoryid
-            INNER JOIN 
-                project.suppliers s
-            ON 
-                e.supplierid = s.supplierid
-            ORDER BY 
-                e.equipmentid
+            result = await db.raw(`WITH LatestOrder AS (
+    SELECT 
+        o.orderID, 
+        o.userID, 
+        o.date 
+    FROM 
+        Project.Orders o
+    WHERE 
+        o.userID = ${userId}
+    ORDER BY 
+        o.date DESC
+    LIMIT 1
+)
+SELECT 
+    e.equipmentID, 
+    e.equipmentName, 
+    e.equipmentImgPath, 
+    e.rating, 
+    e.modelNumber, 
+    e.purchaseDate, 
+    e.quantity AS totalQuantity, 
+    eo.quantity AS orderedQuantity, 
+    e.status, 
+    e.location, 
+    e.categoryID, 
+    e.supplierID
+FROM 
+    Project.Equipments e
+INNER JOIN 
+    Project.EquipmentOrders eo 
+    ON e.equipmentID = eo.equipmentID
+INNER JOIN 
+    LatestOrder lo 
+    ON eo.orderID = lo.orderID;
+
  `);
         }catch(error){
             console.log("error message",error.message);
