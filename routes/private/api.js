@@ -291,7 +291,7 @@ INNER JOIN
 ON 
     e.supplierid = s.supplierid
 WHERE 
-    e.equipmentname ='${req.params.name}'
+    e.equipmentname ILIKE  '%${req.params.name}%'
 ORDER BY 
     e.equipmentid;
         `);
@@ -320,7 +320,7 @@ INNER JOIN
 ON 
     e.supplierid = s.supplierid
 WHERE 
-    e.status = '${req.params.status}' 
+    e.status ILIKE  '%${req.params.status}%'
 ORDER BY 
     e.equipmentid;
         `);
@@ -349,7 +349,7 @@ INNER JOIN
 ON 
     e.supplierid = s.supplierid
 WHERE 
-    c.categoryname = '${req.params.category}' 
+    c.categoryname ILIKE  '%${req.params.category}%' 
 ORDER BY 
     e.equipmentid;
         `);
@@ -378,7 +378,7 @@ INNER JOIN
 ON 
     e.supplierid = s.supplierid
 WHERE 
-    s.suppliername = '${req.params.supplier}' 
+    s.suppliername ILIKE  '%${req.params.supplier}%' 
 ORDER BY 
     e.equipmentid;
         `);
