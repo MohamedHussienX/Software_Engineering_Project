@@ -96,10 +96,21 @@ function handlePrivateBackendApi(app) {
       const {equipmentname,comment, score} = req.body 
       const query=`select equipmentid from "project"."equipments" where equipmentname='${equipmentname}'`
       const n=await db.raw(query)
-      const id=n.row[0].equipmentid
+      const id=n.rows[0].equipmentid
       const result = await db.raw(
         `insert into "project"."ratings"(userid, equipmentid, comment,score)
           values('${u.userId}','${id}','${comment}','${score}');`);
+      const old=await db.raw(`select rating from "project"."equipments" where equipmentid='${id}'`)
+      const realscore=parseInt(score)
+      const oldrating=old.rows[0].rating
+      console.log(oldrating)
+      console.log(score)
+      const newrating=(oldrating+realscore)/2
+      console.log(newrating)
+      const r=await db.raw(`update "project"."equipments"
+        set
+        rating=${newrating}
+        where equipmentid='${id}'`)
       return res.status(200).send('New rating has successfully added')
     } catch (err) {
       console.log("error message", err.message);
@@ -261,6 +272,123 @@ function handlePrivateBackendApi(app) {
       return res.status(400).send(err.message);
     }
   }); 
+
+  app.get('/api/v1/searchname/:name' , async function(req , res) {
+    try{
+      const result = await db.raw(`
+SELECT 
+    e.*, 
+    c.categoryname, 
+    s.suppliername
+FROM 
+    project.equipments e
+INNER JOIN 
+    project.categories c
+ON 
+    e.categoryid = c.categoryid
+INNER JOIN 
+    project.suppliers s
+ON 
+    e.supplierid = s.supplierid
+WHERE 
+    e.equipmentname ='${req.params.name}'
+ORDER BY 
+    e.equipmentid;
+        `);
+      //console.log(`result here`,result.rows);
+      return res.status(200).send(result.rows);
+    }catch(err){
+      console.log("error message",err.message);
+      return res.status(400).send(err.message);
+    }
+  }); 
+  app.get('/api/v1/searchstatus/:status' , async function(req , res) {
+    try{
+      const result = await db.raw(`
+SELECT 
+    e.*, 
+    c.categoryname, 
+    s.suppliername
+FROM 
+    project.equipments e
+INNER JOIN 
+    project.categories c
+ON 
+    e.categoryid = c.categoryid
+INNER JOIN 
+    project.suppliers s
+ON 
+    e.supplierid = s.supplierid
+WHERE 
+    e.status = '${req.params.status}' 
+ORDER BY 
+    e.equipmentid;
+        `);
+      //console.log(`result here`,result.rows);
+      return res.status(200).send(result.rows);
+    }catch(err){
+      console.log("error message",err.message);
+      return res.status(400).send(err.message);
+    }
+  }); 
+  app.get('/api/v1/searchcategory/:category' , async function(req , res) {
+    try{
+      const result = await db.raw(`
+SELECT 
+    e.*, 
+    c.categoryname, 
+    s.suppliername
+FROM 
+    project.equipments e
+INNER JOIN 
+    project.categories c
+ON 
+    e.categoryid = c.categoryid
+INNER JOIN 
+    project.suppliers s
+ON 
+    e.supplierid = s.supplierid
+WHERE 
+    c.categoryname = '${req.params.category}' 
+ORDER BY 
+    e.equipmentid;
+        `);
+      //console.log(`result here`,result.rows);
+      return res.status(200).send(result.rows);
+    }catch(err){
+      console.log("error message",err.message);
+      return res.status(400).send(err.message);
+    }
+  });
+  app.get('/api/v1/searchsupplier/:supplier' , async function(req , res) {
+    try{
+      const result = await db.raw(`
+SELECT 
+    e.*, 
+    c.categoryname, 
+    s.suppliername
+FROM 
+    project.equipments e
+INNER JOIN 
+    project.categories c
+ON 
+    e.categoryid = c.categoryid
+INNER JOIN 
+    project.suppliers s
+ON 
+    e.supplierid = s.supplierid
+WHERE 
+    s.suppliername = '${req.params.supplier}' 
+ORDER BY 
+    e.equipmentid;
+        `);
+      //console.log(`result here`,result.rows);
+      return res.status(200).send(result.rows);
+    }catch(err){
+      console.log("error message",err.message);
+      return res.status(400).send(err.message);
+    }
+  });
    //M3ana
   app.get('/api/v1/rating/:id', async function(req, res) {
     let equipExists = await db.select('*').from('project.ratings').where('equipmentid', req.params.id);

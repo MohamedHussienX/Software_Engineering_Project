@@ -17,7 +17,7 @@ $(document).ready(function(){
       data ,
       url: '/api/v1/cart/new',
       success: function(data){
-          console.log(`Hello ${data}`);
+          console.log(`Mabrook${data}`);
           alert("Added successfully");
       },
       error: function(data){

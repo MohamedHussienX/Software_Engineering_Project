@@ -43,20 +43,69 @@ function handlePrivateFrontEndView(app) {
     });
 
     // create new Employee page
-    app.get('/addEmployee' , (req , res) => {    
-        return res.render('add');
+    app.get('/AddRating' , (req , res) => {
+
+        return res.render('AddRating');
+    });
+    app.get('/AddRating/:equipmentid' , async (req , res) => {
+        const r=await db.raw(`select equipmentname from "project"."equipments" where equipmentid='${req.params.equipmentid}'`)
+        const name=r.rows[0].equipmentname
+        return res.render('AddRating',{name});
     });
 
      // view equipments page
      app.get('/Equipments' ,async (req , res) => {    
         let result;
         try{
-            result = await db.raw(`select * from project.equipments order by equipmentid `);
+            result = await db.raw(`SELECT 
+                e.*, 
+                c.categoryname, 
+                s.suppliername
+            FROM 
+                project.equipments e
+            INNER JOIN 
+                project.categories c
+            ON 
+                e.categoryid = c.categoryid
+            INNER JOIN 
+                project.suppliers s
+            ON 
+                e.supplierid = s.supplierid
+            ORDER BY 
+                e.equipmentid
+ `);
         }catch(error){
             console.log("error message",error.message);
             result = error.message;
         }
-        console.log("employee" , result);
+        console.log("Equipments" , result);
+        return res.render('Equipments' , {emp : result.rows});
+    });
+    app.get('/searchequipmentsname' ,async (req , res) => {    
+        let result;
+        try{
+            result = await db.raw(`SELECT 
+                e.*, 
+                c.categoryname, 
+                s.suppliername
+            FROM 
+                project.equipments e
+            INNER JOIN 
+                project.categories c
+            ON 
+                e.categoryid = c.categoryid
+            INNER JOIN 
+                project.suppliers s
+            ON 
+                e.supplierid = s.supplierid
+            ORDER BY 
+                e.equipmentid
+ `);
+        }catch(error){
+            console.log("error message",error.message);
+            result = error.message;
+        }
+        console.log("Equipments" , result);
         return res.render('Equipments' , {emp : result.rows});
     });
 
