@@ -14,8 +14,9 @@
         <ul class="nav navbar-nav">
           <li class="active"><a href="/">Home</a></li>
           <li><a href="/Equipments">Equipment</a></li>
-          <li><a href="/rating">Rating</a></li>
+          <li><a href="/AddRating">AddRating</a></li>
           <li><a href="/Cart">Cart</a></li>
+          <li><a href="/order">Order</a></li>
         </ul>
       </nav>
     </div>
