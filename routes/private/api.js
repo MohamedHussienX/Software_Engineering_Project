@@ -57,7 +57,7 @@ function handlePrivateBackendApi(app) {
         {
           const status=await db.raw(`update "project"."equipments"
             set
-            status="Out Of Stock"
+            status='Out Of Stock'
             where equipmentid='${oi_equipmentid}'
             `)
         }  
@@ -475,6 +475,39 @@ ORDER BY
         console.log("error message", err.message);
         return res.status(400).send("failed to delete employee");
       }
+  });
+  app.put('/api/v1/cart/:id' , async (req , res) => {
+    try{
+      const u = await getUser(req);
+      if(u.role=='admin'){
+        return res.status(403).send("NOT AUTHORIZED");
+      }
+      const cartid = parseInt(req.params.id); // Explicitly convert to integer
+
+      if (!cartid) {
+          return res.status(400).send("Invalid cartid");
+      }
+      const {quantity}=req.body;
+      console.log(req.body);
+
+      const query=`UPDATE "project"."carts"
+                 SET
+                quantity = '${quantity}'
+            WHERE cartid = '${cartid}' 
+            `;
+
+       const result = await db.raw(query);
+
+       if(res.rowcount===0){
+        return res.status(404).send("Equipment not found");
+       }
+       return res.status(200).send("updated successfully;");
+    }
+
+    catch(err){
+        console.log("error message",err.message);
+        return res.status(500).send("Failed to update Equipment");
+    }
   });
 
   

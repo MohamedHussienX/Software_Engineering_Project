@@ -18,31 +18,48 @@
             <li><a href="/Equipments">Equipments</a></li>
             <li><a href="/AddRating">AddRating</a></li>
             <li><a href="/Cart">Cart</a></li>
-            <li class="active"><a href="/order">Order</a></li>
+            <li class="active"><a href="/order">OrderHistory</a></li>
           </ul>
       </nav>
     </div>
-
-    <div class="container">
+        <div class="container">
       <table class="table table-striped">
         <thead>
+      </div>
           <tr>
+            <th class="text-center">ID</th>
             <th class="text-center">EquipmentName</th>
+            <th class="text-center">Image</th>
+            <th class="text-center">Rating</th>
+            <th class="text-center">Model Number</th>
             <th class="text-center">Quantity</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Location</th>
+            <th class="text-center">Supplier ID</th>
+            <th class="text-center">Category ID</th>
+            <th class="text-center">Purchase Date</th>
           </tr>
         </thead>
         <tbody id="tbody">
-
           {{#emp}}
-            <tr>
+            <tr id={{equipmentid}}>
+                <td class="text-center">{{equipmentid}}</td>
                 <td class="text-center">{{equipmentname}}</td>
                 <td class="text-center">
-                    <input type="int" class="form-control" id="quantity" name="quantity" value="{{quantity}}">
-                    <button id="{{equipmentname}}" class="btn btn-danger Update" type="button">Update</button>
-                </td>           
+           <img src="{{equipmentimgpath}}" alt="{{equipmentname}}" style="width: 100px; height: auto;">
+                </td>
+                <td class="text-center">{{rating}}</td>
+                <td class="text-center">{{modelnumber}}</td>
+                <td class="text-center">{{orderedquantity}}</td>
+                <td class="text-center">{{status}}</td>
+                <td class="text-center">{{location}}</td>
+                <td class="text-center">{{supplierid}}</td>
+                <td class="text-center">{{categoryid}}</td>
+                <td class="text-center">{{order_date}}</td>
+                <td class="text-center">
+                </td>                      
             </tr>
           {{/emp}}
-                    <button id="addorder" class="btn btn-danger Update" type="button">Make an order</button>
         </tbody>
       </table>
     </div>

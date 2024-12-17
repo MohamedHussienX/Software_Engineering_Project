@@ -16,7 +16,7 @@
           <li><a href="/Equipments">Equipment</a></li>
           <li><a href="/AddRating">AddRating</a></li>
           <li><a href="/Cart">Cart</a></li>
-          <li><a href="/order">Order</a></li>
+          <li><a href="/order">OrderHistory</a></li>
         </ul>
       </nav>
     </div>

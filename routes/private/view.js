@@ -116,41 +116,51 @@ function handlePrivateFrontEndView(app) {
 
     app.get('/order' ,async (req , res) => {    
         let result;
+        const u= await getUser(req)
+    if(u.role=='admin')
+    {
+     return res.status(400).send("NOT AUTHORIZED");
+    }
+    console.log(u.userId)
         try{
-            result = await db.raw(`WITH LatestOrder AS (
-    SELECT 
-        o.orderID, 
-        o.userID, 
-        o.date 
-    FROM 
-        Project.Orders o
-    WHERE 
-        o.userID = ${userId}
-    ORDER BY 
-        o.date DESC
-    LIMIT 1
-)
-SELECT 
-    e.equipmentID, 
-    e.equipmentName, 
-    e.equipmentImgPath, 
+            result = await db.raw(`SELECT 
+    e.equipmentid, 
+    e.equipmentname, 
+    e.equipmentimgpath, 
     e.rating, 
-    e.modelNumber, 
-    e.purchaseDate, 
-    e.quantity AS totalQuantity, 
-    eo.quantity AS orderedQuantity, 
+    e.modelnumber, 
+    e.purchasedate, 
+    e.quantity AS totalquantity, 
+    eo.quantity AS orderedquantity, 
     e.status, 
     e.location, 
-    e.categoryID, 
-    e.supplierID
+    e.categoryid, 
+    e.supplierid,
+    o.date AS order_date  -- Adding the order date from the orders table
 FROM 
-    Project.Equipments e
+    project.equipments e 
 INNER JOIN 
-    Project.EquipmentOrders eo 
-    ON e.equipmentID = eo.equipmentID
+    project.equipmentorders eo 
+    ON e.equipmentid = eo.equipmentid 
 INNER JOIN 
-    LatestOrder lo 
-    ON eo.orderID = lo.orderID;
+    project.orders o 
+    ON eo.orderid = o.orderid 
+WHERE 
+    o.userid = ${u.userId}
+    AND o.orderid = (
+        SELECT 
+            MAX(o2.orderid)
+        FROM 
+            project.orders o2
+        INNER JOIN 
+            project.equipmentorders eo2 
+            ON o2.orderid = eo2.orderid
+        WHERE 
+            o2.userid = ${u.userId}
+    )
+ORDER BY 
+    o.date DESC;  -- Ordering by the date of the orders from newest to oldest
+
 
  `);
         }catch(error){

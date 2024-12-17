@@ -8,7 +8,7 @@ $(document).ready(function(){
         success: function (data){
             console.log("message from server",data);
             alert(data)
-            window.location.href="/order"
+            window.location.href='/order'
           },
         error : function(data){
           alert(data.responseText);
