@@ -5,70 +5,95 @@ const { getUser } = require('../../utils/session');
 
 function handlePrivateBackendApi(app) {
   //M3ana
-  app.post('/api/v1/order/new', async (req, res)=> {
-    const u= await getUser(req)
-    if(u.role=='admin')
-    {
-     return res.status(400).send("NOT AUTHORIZED");
+  app.post('/api/v1/order/new', async (req, res) => {
+    const u = await getUser(req);
+    if (u.role === 'admin') {
+        return res.status(400).send("NOT AUTHORIZED");
     }
     try {
-      console.log("req",req.body); 
-          const countuser=`SELECT COUNT(*) FROM "project"."carts" WHERE userid = '${u.userId}';`
-          const countusers=await db.raw(countuser)
-          console.log(countusers) 
-          const count_users=countusers.rows[0].count
-          console.log(count_users)
-          const o=`select equipmentid,quantity from "project"."carts" where userid='${u.userId}' `
-          const oi=await db.raw(o)
-          for(let i=0;i<count_users;i++){
-          const oi_equipmentid=oi.rows[i].equipmentid
-          console.log(oi_equipmentid)
-          const oi_quantity=oi.rows[i].quantity
-          console.log(oi_quantity)
-          const originalquantity=`select quantity from "project"."equipments" where equipmentid='${oi_equipmentid}'`
-          const original_quantity=await db.raw(originalquantity)
-          const quantity=original_quantity.rows[0].quantity
-          if (!original_quantity.rows[0]) {
-            return res.status(404).send("Equipment not found");}
-          console.log(quantity)
-          if(oi_quantity>quantity)
-          {
-            return res.status(404).send("Not Enough Quantity")
-          }
-          console.log(oi)
-          const finalquantity=quantity-oi_quantity
-          const result = await db.raw(
-            `insert into "project"."orders"(userid, date)
-              values('${u.userId}','${new Date().toISOString()}');`);
-              const q=`delete from "project"."carts" where userid='${u.userId}'`
-              const query=await db.raw(q)
-            const order = await db.raw(`select orderid from project.orders where userid=${u.userId}`)
-            const order2 = order.rows[0].orderid
-            console.log(order2)
-      const re=await db.raw(`UPDATE "project"."equipments"
-                 SET
-                 quantity='${finalquantity}'
-                 where equipmentid='${oi_equipmentid}'`)
-      const r=await db.raw(
-        `insert into "project"."equipmentorders"(orderid,equipmentid,quantity)
-          values('${order2}','${oi_equipmentid}','${oi_quantity}')`
-      )
-      if(finalquantity==0)
-        {
-          const status=await db.raw(`update "project"."equipments"
-            set
-            status='Out Of Stock'
-            where equipmentid='${oi_equipmentid}'
-            `)
-        }  
+        console.log("req", req.body);
 
+        // Count items in user's cart
+        const countUser = `SELECT COUNT(*) FROM "project"."carts" WHERE userid = '${u.userId}';`;
+        const countUsers = await db.raw(countUser);
+        const count_users = countUsers.rows[0].count;
+
+        // Get cart details
+        const cartItemsQuery = `SELECT equipmentid, quantity FROM "project"."carts" WHERE userid = '${u.userId}';`;
+        const cartItems = await db.raw(cartItemsQuery);
+
+        // Create new order
+        const orderResult = await db.raw(
+            `INSERT INTO "project"."orders"(userid, date)
+             VALUES('${u.userId}', '${new Date().toISOString()}') RETURNING orderid;`
+        );
+        const orderId = orderResult.rows[0].orderid;
+
+        for (let i = 0; i < count_users; i++) {
+            const equipmentId = cartItems.rows[i].equipmentid;
+            const orderQuantity = cartItems.rows[i].quantity;
+
+            // Check stock
+            const originalQuantityQuery = `SELECT quantity FROM "project"."equipments" WHERE equipmentid = '${equipmentId}';`;
+            const originalQuantityResult = await db.raw(originalQuantityQuery);
+            if (!originalQuantityResult.rows[0]) {
+                return res.status(404).send("Equipment not found");
+            }
+            const stockQuantity = originalQuantityResult.rows[0].quantity;
+
+            if (orderQuantity > stockQuantity) {
+                return res.status(404).send("Not Enough Quantity");
+            }
+
+            const finalQuantity = stockQuantity - orderQuantity;
+
+            // Update stock
+            await db.raw(
+                `UPDATE "project"."equipments"
+                 SET quantity = '${finalQuantity}'
+                 WHERE equipmentid = '${equipmentId}';`
+            );
+
+            // Check if item already exists in EquipmentOrders
+            const checkEquipmentOrder = `SELECT COUNT(*) FROM "project"."equipmentorders"
+                                         WHERE orderid = '${orderId}' AND equipmentid = '${equipmentId}';`;
+            const equipmentOrderCount = await db.raw(checkEquipmentOrder);
+
+            if (equipmentOrderCount.rows[0].count > 0) {
+                // Update existing row
+                await db.raw(
+                    `UPDATE "project"."equipmentorders"
+                     SET quantity = quantity + ${orderQuantity}
+                     WHERE orderid = '${orderId}' AND equipmentid = '${equipmentId}';`
+                );
+            } else {
+                // Insert new row
+                await db.raw(
+                    `INSERT INTO "project"."equipmentorders"(orderid, equipmentid, quantity)
+                     VALUES('${orderId}', '${equipmentId}', '${orderQuantity}');`
+                );
+            }
+
+            // Mark as "Out of Stock" if quantity is zero
+            if (finalQuantity === 0) {
+                await db.raw(
+                    `UPDATE "project"."equipments"
+                     SET status = 'Out Of Stock'
+                     WHERE equipmentid = '${equipmentId}';`
+                );
+            }
         }
-      return res.status(200).send('New Order Has Successfully Added')
+
+        // Clear the cart
+        await db.raw(`DELETE FROM "project"."carts" WHERE userid = '${u.userId}';`);
+
+        return res.status(200).send('New Order Has Successfully Added');
     } catch (err) {
-      console.log("error message", err.message);
-      return res.status(400).send("Failed To Add New Order");
+        console.log("error message", err.message);
+        return res.status(400).send("Failed To Add New Order");
     }
-  });
+});
+
   //M3ana
   app.post("/api/v1/equipment/new", async (req, res) => {
     const u= await getUser(req)
