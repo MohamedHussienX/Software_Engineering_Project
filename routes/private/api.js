@@ -534,9 +534,54 @@ ORDER BY
         return res.status(500).send("Failed to update Equipment");
     }
   });
-
-  
-  
+  app.get('/api/v1/searchuserid/:userid' , async function(req , res) {
+    try{
+      const result = await db.raw(`
+SELECT * from "project"."users" where userid =  '${req.params.userid}'
+        `);
+      //console.log(`result here`,result.rows);
+      return res.status(200).send(result.rows);
+    }catch(err){
+      console.log("error message",err.message);
+      return res.status(400).send(err.message);
+    }
+  }); 
+  app.get('/api/v1/searchusername/:username' , async function(req , res) {
+    try{
+      const result = await db.raw(`
+SELECT * from "project"."users" where username ILIKE '%${req.params.username}%'
+        `);
+      //console.log(`result here`,result.rows);
+      return res.status(200).send(result.rows);
+    }catch(err){
+      console.log("error message",err.message);
+      return res.status(400).send(err.message);
+    }
+  }); 
+  app.get('/api/v1/searchemail/:email' , async function(req , res) {
+    try{
+      const result = await db.raw(`
+SELECT * from "project"."users" where email ILIKE '%${req.params.email}%'
+        `);
+      //console.log(`result here`,result.rows);
+      return res.status(200).send(result.rows);
+    }catch(err){
+      console.log("error message",err.message);
+      return res.status(400).send(err.message);
+    }
+  });
+  app.get('/api/v1/searchrole/:role' , async function(req , res) {
+    try{
+      const result = await db.raw(`
+SELECT * from "project"."users" where role ILIKE '%${req.params.role}%'
+        `);
+      //console.log(`result here`,result.rows);
+      return res.status(200).send(result.rows);
+    }catch(err){
+      console.log("error message",err.message);
+      return res.status(400).send(err.message);
+    }
+  });
 
 
 
