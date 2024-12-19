@@ -13,7 +13,7 @@
         <ul class="nav navbar-nav">
           <li><a href="/">Home</a></li>
           <li><a href="/ManageEquipments">Manage Equipments</a></li>
-          <li class="active"><a href="/ManageUsers" class="active">Manage Users</a></li>
+          <li class="active"><a href="/ManageUsers">Manage Users</a></li>
         </ul>
       </nav>
     </div>

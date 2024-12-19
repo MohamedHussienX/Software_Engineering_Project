@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/js/jquery-2.2.0.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/src/search.js"></script>
+    <script src="/src/ManageEquipments.js"></script>
+  </head>
+  <body>
+    <div>
+      <nav class="navbar navbar-inverse" style="padding-left: 130px;">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          <li class="active"><a href="/ManageEquipments">Manage Equipments</a></li>
+          <li><a href="/ManageUsers">Manage Users</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="container">
+      <table class="table table-striped">
+        <thead>
+<div class="form-group">
+    <label for="search" class="col-sm-2 control-label">Search</label>
+    <div class="col-sm-4">
+        <select class="form-control" id="search" name="search" required>
+            <option value="" disabled selected>Select Equipment</option>
+            <option value="Name">Name</option>
+            <option value="Status">Status</option>
+            <option value="Supplier">Supplier</option>
+            <option value="Category">Category</option>
+        </select>
+    </div>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="search-value" name="search-value" placeholder="Enter Value">
+    </div>
+    <div class="col-sm-2">
+        <button type="button" id="search-button" class="btn btn-primary">Search</button>
+    </div>
+</div>
+<div class="col-sm-2">
+        <button type="button" id="addequip" class="btn btn-primary">Add Equipment</button>
+</div>
+</div>
+
+
+      </div>
+          <tr>
+            <th class="text-center">ID</th>
+            <th class="text-center">EquipmentName</th>
+            <th class="text-center">Image</th>
+            <th class="text-center">Rating</th>
+            <th class="text-center">Model Number</th>
+            <th class="text-center">Quantity</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Location</th>
+            <th class="text-center">Supplier Name</th>
+            <th class="text-center">Category</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+
+          {{#emp}}
+            <tr id={{equipmentid}}>
+               <td class="text-center">{{equipmentid}}</td>
+                <td class="text-center">{{equipmentname}}</td>
+                <td class="text-center">
+           <img src="{{equipmentimgpath}}" alt="{{equipmentname}}" style="width: 100px; height: auto;">
+               </td>
+                <td class="text-center">{{rating}}</td>
+                <td class="text-center">{{modelnumber}}</td>
+                <td class="text-center">{{quantity}}</td>
+                <td class="text-center">{{status}}</td>
+                <td class="text-center">{{location}}</td>
+                <td class="text-center">{{suppliername}}</td>
+                <td class="text-center">{{categoryname}}</td>
+                <td class="text-center">
+                <button id="{{equipmentid}}" class="btn btn-danger remove" type="button">Delete</button>
+                <button id="edit{{equipmentid}}" class="btn btn-danger edit" type="button">Edit</button>
+                </td>           
+            </tr>
+          {{/emp}}
+          
+        </tbody>
+      </table>
+    </div>
+
+  </body>
+</html>
