@@ -3,13 +3,24 @@ const { getSessionToken , getUser } = require('../../utils/session');
 
 
 function handlePrivateFrontEndView(app) {
+    app.get('/ManageUsers' ,async (req , res) => {    
+        let result;
+        try{
+            result = await db.raw(`SELECT * FROM "project"."users"`);
+        }catch(error){
+            console.log("error message",error.message);
+            result = error.message;
+        }
+        console.log("ManageUsers" , result);
+        return res.render('ManageUsers' , {emp : result.rows});
+    });
 
     app.get('/dashboard' , async (req , res) => {
         
         const user = await getUser(req);
         console.log('user info' , user)
         if(user.role == "admin" ){
-            return res.render('profile');
+            return res.render('adminHomepage');
         }
         // role of customer
         return res.render('customerHomepage' , {name : user.name});
