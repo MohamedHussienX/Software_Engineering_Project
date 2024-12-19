@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/js/jquery-2.2.0.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/src/search.js"></script>
+    <script src="/src/ManageEquipments.js"></script>
+  </head>
+  <body>
+    <div>
+      <nav class="navbar navbar-inverse" style="padding-left: 130px;">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/ManageEquipments">Manage Equipments</a></li>
+          <li><a href="/ManageUsers">Manage Users</a></li>
+          <li class="active"><a>Add Equipments</a></li>
+        </ul>
+      </nav>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" id="1search-value" name="search-value" placeholder="Enter Equipment Name">
+    </div>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="2search-value" name="search-value" placeholder="Enter Equipment Name">
+    </div>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="3search-value" name="search-value" placeholder="Enter Equipment Name">
+    </div>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="4search-value" name="search-value" placeholder="Enter Equipment Name">
+    </div>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="5search-value" name="search-value" placeholder="Enter Equipment Name">
+    </div>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="6search-value" name="search-value" placeholder="Enter Equipment Name">
+    </div>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="7search-value" name="search-value" placeholder="Enter Equipment Name">
+    </div>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" id="8search-value" name="search-value" placeholder="Enter Equipment Name">
+    </div>
+    </div>
+    </head>
+    </html>

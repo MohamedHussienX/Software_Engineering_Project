@@ -2,7 +2,38 @@ const db = require('../../connectors/db');
 const { getSessionToken , getUser } = require('../../utils/session');
 
 
+
 function handlePrivateFrontEndView(app) {
+    app.get('/AddEquipment' ,async (req , res) => {    
+        return res.render('AddEquipment');
+    });
+    app.get('/ManageEquipments' ,async (req , res) => {    
+        let result;
+        try{
+            result = await db.raw(`SELECT 
+                e.*, 
+                c.categoryname, 
+                s.suppliername
+            FROM 
+                project.equipments e
+            INNER JOIN 
+                project.categories c
+            ON 
+                e.categoryid = c.categoryid
+            INNER JOIN 
+                project.suppliers s
+            ON 
+                e.supplierid = s.supplierid
+            ORDER BY 
+                e.equipmentid
+ `);
+        }catch(error){
+            console.log("error message",error.message);
+            result = error.message;
+        }
+        console.log("ManageEquipments" , result);
+        return res.render('ManageEquipments' , {emp : result.rows});
+    });
     app.get('/ManageUsers' ,async (req , res) => {    
         let result;
         try{
