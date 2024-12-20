@@ -3,6 +3,8 @@ $(document).ready(function() {
         event.preventDefault(); // Prevent default form submission if inside a form
         console.log('Added');
         const formData = new FormData();
+        let equipmentid=$('#add').attr('name')
+        console.log(equipmentid)
         let equipmentName = $('#en').val();
         let equipmentImgPath = $('#picture')[0].files[0];
         let modelNumber = $('#mn').val();
@@ -13,8 +15,9 @@ $(document).ready(function() {
         let supplierid = $('#sid').val();
         let filename=equipmentName.replace(/ /g,"_")
         const specificFileName = `${filename}.jpg`; // Replace with your desired file name
+        
     formData.append('file', equipmentImgPath, specificFileName);
-
+        
     // Send the file to the server via AJAX
     $.ajax({
       url: '/upload', // Replace with your server-side upload endpoint
@@ -31,6 +34,7 @@ $(document).ready(function() {
     });
 
         const content = {
+            equipmentid,
             equipmentName,
             specificFileName,
             modelNumber,
@@ -43,7 +47,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: '/api/v1/equipment/:id',
+            url: `/api/v1/equipment/${equipmentid}`,
             contentType: 'application/json', // Set content type to JSON
             data: JSON.stringify(content), // Convert content to JSON string
             success: function(data) {
