@@ -11,6 +11,18 @@ function handlePrivateBackendApi(app) {
     if (u.role === 'admin') {
         return res.status(400).send("NOT AUTHORIZED");
     }
+    const countUser2 = `SELECT COUNT(*)
+FROM project.carts AS c
+JOIN project.equipments AS e
+ON c.equipmentID = e.equipmentID
+WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
+;`;
+        const countUsers2 = await db.raw(countUser2);
+        const count_users2 = countUsers2.rows[0].count;
+    if(count_users2==0)
+    {
+      return res.status(400).send("YOU HAVE TO ENTER EQUIPMENT(S) FIRST");
+    }
     try {
         console.log("req", req.body);
 
