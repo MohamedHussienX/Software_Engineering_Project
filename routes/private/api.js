@@ -240,22 +240,20 @@ WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
       if(u.role=='standard_user'){
         return res.status(403).send("NOT AUTHORIZED");
       }
-      const equipmentid = (req.params.id); // Explicitly convert to integer
+      const equipmentid = parseInt(req.params.id); // Explicitly convert to integer
 
       if (!equipmentid) {
           return res.status(400).send("Invalid equipmentid");
       }
       // const {equipmentid}=parseInt(req.params.id);
-      const {equipmentname, equipmentimgpath, rating, modelNumber,purchasedate,quantity,categoryid,supplierid}=req.body;
+      const {equipmentName, specificFileName, rating, modelNumber,purchasedate,quantity,categoryid,supplierid}=req.body;
       console.log(req.body);
 
       const query=`UPDATE "project"."equipments"
                  SET
-                equipmentname = '${equipmentname}',
-                equipmentimgpath = '${equipmentimgpath}',
-                
+                equipmentname = '${equipmentName}',
+                equipmentimgpath = '${specificFileName}',
                 modelNumber = '${modelNumber}',
-                
                 quantity = '${quantity}',
                 categoryid = '${categoryid}',
                 supplierid = '${supplierid}'
@@ -267,7 +265,7 @@ WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
        if(res.rowcount===0){
         return res.status(404).send("Equipment not found");
        }
-       return res.status(200).send("updated successfully;");
+       return res.status(200).send("Updated successfully;");
     }
 
     catch(err){

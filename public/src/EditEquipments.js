@@ -52,16 +52,16 @@ $(document).ready(function() {
             contentType: 'application/json', // Set content type to JSON
             data: JSON.stringify(content), // Convert content to JSON string
             success: function(data) {
-                console.log(`Added ${data}`); // Corrected string interpolation
-                alert("Added Successfully");
-         $('#en').val('');
-         $('#picture').val('');
-         $('#mn').val('');
-         $('#q').val('');
-         $('#s').val('');
-         $('#l').val('');
-         $('#cid').val('');
-         $('#sid').val('');
+                console.log(`Edited ${data}`); // Corrected string interpolation
+                alert("Edited Successfully");
+        //  $('#en').val('');
+        //  $('#picture').val('');
+        //  $('#mn').val('');
+        //  $('#q').val('');
+        //  $('#s').val('');
+        //  $('#l').val('');
+        //  $('#cid').val('');
+        //  $('#sid').val('');
             },
             error: function(data) {
                 console.log("Error message:", data.responseText);
