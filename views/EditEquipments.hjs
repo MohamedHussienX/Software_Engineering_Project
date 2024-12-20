@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/js/jquery-2.2.0.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/src/AddEquipments.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div>
+      <nav class="navbar navbar-inverse" style="padding-left: 130px;">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/ManageEquipments">Manage Equipments</a></li>
+          <li><a href="/ManageUsers">Manage Users</a></li>
+        </ul>
+      </nav>
+    </div>
+    
+    <div>
+        {{#emp}}
+      <form class="form-horizontal" style="width: 70%; margin: auto;" enctype="multipart/form-data" id="adminForm">
+        <!-- Equipment Name -->
+        <div class="form-group row">
+          <label for="en" class="col-sm-2 col-form-label">Equipment Name</label>
+          <div class="col-sm-10">
+            <input type="text" id="en" name="eid" class="form-control" placeholder="Name" value="{{equipmentname}}"required>
+          </div>
+        </div>
+        
+        <!-- Image Upload -->
+        <!-- Image Upload -->
+<div class="form-group row">
+  <label for="picture" class="col-sm-2 col-form-label">Upload Picture</label>
+  <div class="col-sm-10">
+    <!-- File input -->
+    <input type="file" id="picture" name="picture" class="form-control" accept="image/*" required>
+    <!-- Existing image preview -->
+    <img id="previewImage" src="/images/{{equipmentimgpath}}" alt="Equipment Image" style="margin-top: 10px; max-width: 100%; max-height: 200px;" />
+  </div>
+</div>
+
+        
+        <!-- Model Number -->
+        <div class="form-group row">
+          <label for="mn" class="col-sm-2 col-form-label">Model Number</label>
+          <div class="col-sm-10">
+            <input type="text" id="mn" name="mname" class="form-control" placeholder="Model Number"value="{{modelnumber}}" required>
+          </div>
+        </div>
+        
+        <!-- Quantity -->
+        <div class="form-group row">
+          <label for="q" class="col-sm-2 col-form-label">Quantity</label>
+          <div class="col-sm-10">
+            <input type="text" id="q" name="lname" class="form-control" placeholder="Quantity" value="{{quantity}}"required>
+          </div>
+        </div>
+        
+        <!-- Status -->
+        <div class="form-group row">
+          <label for="s" class="col-sm-2 col-form-label">Status</label>
+          <div class="col-sm-10">
+            <input type="text" id="s" name="country" class="form-control" value="In Stock"value="{{status}}" required>
+          </div>
+        </div>
+        
+        <!-- Location -->
+        <div class="form-group row">
+          <label for="l" class="col-sm-2 col-form-label">Location</label>
+          <div class="col-sm-10">
+            <input type="text" id="l" name="salary" class="form-control" placeholder="Location" value="{{location}}"required>
+          </div>
+        </div>
+        
+        <!-- Category ID -->
+        <div class="form-group row">
+          <label for="cid" class="col-sm-2 col-form-label">Category ID</label>
+          <div class="col-sm-10">
+            <input type="text" id="cid" name="birthdate" class="form-control" placeholder="ID" value="{{categoryid}}"required>
+          </div>
+        </div>
+        
+        <!-- Supplier ID -->
+        <div class="form-group row">
+          <label for="sid" class="col-sm-2 col-form-label">Supplier ID</label>
+          <div class="col-sm-10">
+            <input type="text" id="sid" name="birthdate" class="form-control" placeholder="ID" value="{{supplierid}}"required>
+          </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="form-group row">
+          <div class="col-sm-10 offset-sm-2">
+            <button type="submit" id="add" name="submit" class="btn btn-primary">Edit Equipment</button>
+          </div>
+        </div>
+      </form>
+      
+      <!-- Message Area -->
+      <div id="message" style="margin-top: 20px; text-align: center;"></div>
+      {{/emp}}
+    </div>
+
+  </body>
+</html>

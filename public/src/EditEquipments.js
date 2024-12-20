@@ -42,8 +42,8 @@ $(document).ready(function() {
         };
 
         $.ajax({
-            type: "PUT",
-            url: '/api/v1/equipment/new',
+            type: "POST",
+            url: '/api/v1/equipment/:id',
             contentType: 'application/json', // Set content type to JSON
             data: JSON.stringify(content), // Convert content to JSON string
             success: function(data) {

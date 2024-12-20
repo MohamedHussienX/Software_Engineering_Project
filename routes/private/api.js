@@ -109,10 +109,10 @@ WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
     }
     try{
       console.log("req",req.body);
-      const {equipmentName, equipmentImgPath, modelNumber,quantity,status,location} = req.body 
+      const {equipmentName, specificFileName, modelNumber,quantity,status,location,categoryid,supplierid} = req.body 
       const result = await db.raw(
-        `insert into "project"."equipments"(equipmentname, equipmentimgpath,modelnumber,quantity,status,location)
-          values('${equipmentName}','${equipmentImgPath}','${modelNumber}','${quantity}','${status}','${location}');`);
+        `insert into "project"."equipments"(equipmentname, equipmentimgpath,modelnumber,quantity,status,location,categoryid,supplierid)
+          values('${equipmentName}','${specificFileName}','${modelNumber}','${quantity}','${status}','${location}','${categoryid}','${supplierid}');`);
       return res.status(200).send('new equipment has successfully added')
     }catch(err){
       console.log("error message", err.message);

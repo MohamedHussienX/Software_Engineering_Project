@@ -47,5 +47,9 @@ $(document).ready(function(){
         // Redirect to the desired view
         window.location.href = '/AddEquipment'; // Replace with your desired URL
     }); 
+    $("#tbody").on('click','.edit',function() {
+        // Redirect to the desired view
+        window.location.href = $(this).attr('id'); // Replace with your desired URL
+    }); 
       
 }); 

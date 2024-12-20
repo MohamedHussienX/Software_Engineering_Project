@@ -68,7 +68,7 @@
                <td class="text-center">{{equipmentid}}</td>
                 <td class="text-center">{{equipmentname}}</td>
                 <td class="text-center">
-           <img src="{{equipmentimgpath}}" alt="{{equipmentname}}" style="width: 100px; height: auto;">
+           <img src="/images/{{equipmentimgpath}}" alt="{{equipmentname}}" style="width: 100px; height: auto;">
                </td>
                 <td class="text-center">{{rating}}</td>
                 <td class="text-center">{{modelnumber}}</td>

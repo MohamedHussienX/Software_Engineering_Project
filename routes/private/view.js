@@ -7,6 +7,35 @@ function handlePrivateFrontEndView(app) {
     app.get('/AddEquipment' ,async (req , res) => {    
         return res.render('AddEquipment');
     });
+    app.get('/EditEquipments/:id' ,async (req , res) => {
+        let result;
+        try{
+            result = await db.raw(`SELECT 
+                e.*, 
+                c.categoryname, 
+                s.suppliername
+            FROM 
+                project.equipments e
+            INNER JOIN 
+                project.categories c
+            ON 
+                e.categoryid = c.categoryid
+            INNER JOIN 
+                project.suppliers s
+            ON 
+                e.supplierid = s.supplierid
+            where
+                e.equipmentid=${req.params.id}
+            ORDER BY 
+                e.equipmentid
+ `);
+        }catch(error){
+            console.log("error message",error.message);
+            result = error.message;
+        }
+        console.log("EditEquipments" , result.rows);
+        return res.render('EditEquipments',{emp:result.rows});
+    });
     app.get('/ManageEquipments' ,async (req , res) => {    
         let result;
         try{
@@ -33,7 +62,7 @@ function handlePrivateFrontEndView(app) {
             console.log("error message",error.message);
             result = error.message;
         }
-        console.log("ManageEquipments" , result);
+        console.log("ManageEquipments" , result.rows);
         return res.render('ManageEquipments' , {emp : result.rows});
     });
     app.get('/ManageUsers' ,async (req , res) => {    
