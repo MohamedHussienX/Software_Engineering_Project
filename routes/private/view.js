@@ -24,6 +24,8 @@ function handlePrivateFrontEndView(app) {
                 project.suppliers s
             ON 
                 e.supplierid = s.supplierid
+            where
+                e.isdeleted='false'
             ORDER BY 
                 e.equipmentid
  `);
@@ -75,7 +77,8 @@ function handlePrivateFrontEndView(app) {
                from "project"."carts"
                inner join "project"."equipments"
                on "project"."carts".equipmentid="project"."equipments".equipmentid
-               where "project"."carts".userid=${u.userId} `);
+               where "project"."carts".userid=${u.userId} AND 
+               "project"."equipments".isdeleted='false' `);
         }catch(error){
             console.log("error message",error.message);
             result = error.message;
@@ -113,6 +116,8 @@ function handlePrivateFrontEndView(app) {
                 project.suppliers s
             ON 
                 e.supplierid = s.supplierid
+            where
+                e.isdeleted='false'
             ORDER BY 
                 e.equipmentid
  `);
@@ -140,6 +145,8 @@ function handlePrivateFrontEndView(app) {
                 project.suppliers s
             ON 
                 e.supplierid = s.supplierid
+            where
+                e.isdeleted='false'
             ORDER BY 
                 e.equipmentid
  `);

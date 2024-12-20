@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const { v4 } = require('uuid');
 const { getUser } = require('../../utils/session');
 
+
 function handlePrivateBackendApi(app) {
   //M3ana
   app.post('/api/v1/order/new', async (req, res) => {
@@ -14,7 +15,12 @@ function handlePrivateBackendApi(app) {
         console.log("req", req.body);
 
         // Count items in user's cart
-        const countUser = `SELECT COUNT(*) FROM "project"."carts" WHERE userid = '${u.userId}';`;
+        const countUser = `SELECT COUNT(*)
+FROM project.carts AS c
+JOIN project.equipments AS e
+ON c.equipmentID = e.equipmentID
+WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
+;`;
         const countUsers = await db.raw(countUser);
         const count_users = countUsers.rows[0].count;
 
@@ -103,10 +109,10 @@ function handlePrivateBackendApi(app) {
     }
     try{
       console.log("req",req.body);
-      const {equipmentName, equipmentImgPath, rating, modelNumber,purchaseDate,quantity,status,location} = req.body 
+      const {equipmentName, equipmentImgPath, modelNumber,quantity,status,location} = req.body 
       const result = await db.raw(
-        `insert into "project"."equipments"(equipmentname, equipmentimgpath, rating, modelnumber,purchasedate,quantity,status,location)
-          values('${equipmentName}','${equipmentImgPath}','${rating}','${modelNumber}','${purchaseDate}','${quantity}','${status}','${location}');`);
+        `insert into "project"."equipments"(equipmentname, equipmentimgpath,modelnumber,quantity,status,location)
+          values('${equipmentName}','${equipmentImgPath}','${modelNumber}','${quantity}','${status}','${location}');`);
       return res.status(200).send('new equipment has successfully added')
     }catch(err){
       console.log("error message", err.message);
@@ -321,7 +327,8 @@ INNER JOIN
 ON 
     e.supplierid = s.supplierid
 WHERE 
-    e.equipmentname ILIKE  '%${req.params.name}%'
+    e.equipmentname ILIKE  '%${req.params.name}%' AND 
+                isdeleted='false'
 ORDER BY 
     e.equipmentid;
         `);
@@ -350,7 +357,8 @@ INNER JOIN
 ON 
     e.supplierid = s.supplierid
 WHERE 
-    e.status ILIKE  '%${req.params.status}%'
+    e.status ILIKE  '%${req.params.status}%' AND 
+                isdeleted='false'
 ORDER BY 
     e.equipmentid;
         `);
@@ -379,7 +387,8 @@ INNER JOIN
 ON 
     e.supplierid = s.supplierid
 WHERE 
-    c.categoryname ILIKE  '%${req.params.category}%' 
+    c.categoryname ILIKE  '%${req.params.category}%' AND 
+                isdeleted='false'
 ORDER BY 
     e.equipmentid;
         `);
@@ -408,7 +417,8 @@ INNER JOIN
 ON 
     e.supplierid = s.supplierid
 WHERE 
-    s.suppliername ILIKE  '%${req.params.supplier}%' 
+    s.suppliername ILIKE  '%${req.params.supplier}%' AND 
+                isdeleted='false' 
 ORDER BY 
     e.equipmentid;
         `);
@@ -493,12 +503,12 @@ ORDER BY
       }
       try {
         const x = req.params.id;
-        const query = `delete from project.equipments where equipmentID=${x}`;
+        const query = `UPDATE project.equipments SET isDeleted = true WHERE equipmentID = ${x}`;
         const result = await db.raw(query);
         return res.status(200).send("deleted succesfully");
       } catch (err) {
         console.log("error message", err.message);
-        return res.status(400).send("failed to delete employee");
+        return res.status(400).send("failed to delete equipment");
       }
   });
   app.put('/api/v1/cart/:id' , async (req , res) => {
@@ -549,7 +559,7 @@ SELECT * from "project"."users" where userid =  '${req.params.userid}'
   app.get('/api/v1/searchusername/:username' , async function(req , res) {
     try{
       const result = await db.raw(`
-SELECT * from "project"."users" where username ILIKE '%${req.params.username}%'
+SELECT * from "project"."users" where username ILIKE '%${req.params.username}%' 
         `);
       //console.log(`result here`,result.rows);
       return res.status(200).send(result.rows);

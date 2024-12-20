@@ -1,6 +1,7 @@
 const db = require('../connectors/db');
 const {getSessionToken} = require('../utils/session');
 
+
 async function authMiddleware(req, res, next) {
   
   
