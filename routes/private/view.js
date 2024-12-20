@@ -4,6 +4,45 @@ const { getSessionToken , getUser } = require('../../utils/session');
 
 
 function handlePrivateFrontEndView(app) {
+    app.get('/orderhistory' ,async (req , res) => {    
+        let result;
+        const u = await getUser(req);
+        try{
+            result = await db.raw(`SELECT 
+    e.equipmentid, 
+    e.equipmentname, 
+    e.equipmentimgpath, 
+    e.rating, 
+    e.modelnumber, 
+    e.purchasedate, 
+    e.quantity AS totalquantity, 
+    eo.quantity AS orderedquantity, 
+    e.status, 
+    e.location, 
+    e.categoryid, 
+    e.supplierid,
+    o.date AS order_date  -- Adding the order date from the orders table
+FROM 
+    project.equipments e 
+INNER JOIN 
+    project.equipmentorders eo 
+    ON e.equipmentid = eo.equipmentid 
+INNER JOIN 
+    project.orders o 
+    ON eo.orderid = o.orderid 
+WHERE 
+    o.userid = ${u.userId}
+ORDER BY 
+    o.date DESC;  -- Ordering by the date of the orders from newest to oldest
+
+ `);
+        }catch(error){
+            console.log("error message",error.message);
+            result = error.message;
+        }
+        console.log("Order History" , result);
+        return res.render('orderhistory' , {emp : result.rows});
+    });
     app.get('/AddEquipment' ,async (req , res) => {    
         return res.render('AddEquipment');
     });
