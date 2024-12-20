@@ -3,10 +3,9 @@ $(document).ready(function() {
         event.preventDefault(); // Prevent default form submission if inside a form
         console.log('Added');
         const formData = new FormData();
-        let equipmentid=parseInt($('#add').attr('name'))
+        let equipmentid=$('#add').attr('name')
         console.log(equipmentid)
         let equipmentName = $('#en').val();
-        console.log(equipmentName)
         let equipmentImgPath = $('#picture')[0].files[0];
         let modelNumber = $('#mn').val();
         let quantity = $('#q').val();

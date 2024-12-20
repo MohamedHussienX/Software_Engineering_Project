@@ -27,6 +27,7 @@
       </div>
           <tr>
             <th class="text-center">ID</th>
+            <th class="text-center">OrderID</th>
             <th class="text-center">EquipmentName</th>
             <th class="text-center">Image</th>
             <th class="text-center">Rating</th>
@@ -42,6 +43,7 @@
           {{#emp}}
             <tr id={{equipmentid}}>
                 <td class="text-center">{{equipmentid}}</td>
+                <td class="text-center">{{orderid}}</td>
                 <td class="text-center">{{equipmentname}}</td>
                 <td class="text-center">
            <img src="{{equipmentimgpath}}" alt="{{equipmentname}}" style="width: 100px; height: auto;">

@@ -121,10 +121,10 @@ WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
     }
     try{
       console.log("req",req.body);
-      const {equipmentName, specificFileName, modelNumber,quantity,status,location,categoryid,supplierid} = req.body 
+      const {equipmentName, specificFileName, modelNumber,purchasedate,quantity,status,location,categoryid,supplierid} = req.body 
       const result = await db.raw(
-        `insert into "project"."equipments"(equipmentname, equipmentimgpath,modelnumber,quantity,status,location,categoryid,supplierid)
-          values('${equipmentName}','${specificFileName}','${modelNumber}','${quantity}','${status}','${location}','${categoryid}','${supplierid}');`);
+        `insert into "project"."equipments"(equipmentname, equipmentimgpath,modelnumber,purchasedate,quantity,status,location,categoryid,supplierid)
+          values('${equipmentName}','${specificFileName}','${modelNumber}','${purchasedate}','${quantity}','${status}','${location}','${categoryid}','${supplierid}');`);
       return res.status(200).send('new equipment has successfully added')
     }catch(err){
       console.log("error message", err.message);
@@ -240,7 +240,7 @@ WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
       if(u.role=='standard_user'){
         return res.status(403).send("NOT AUTHORIZED");
       }
-      const equipmentid = parseInt(req.params.id); // Explicitly convert to integer
+      const equipmentid = (req.params.id); // Explicitly convert to integer
 
       if (!equipmentid) {
           return res.status(400).send("Invalid equipmentid");
@@ -253,9 +253,9 @@ WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
                  SET
                 equipmentname = '${equipmentname}',
                 equipmentimgpath = '${equipmentimgpath}',
-                rating = '${rating}',
+                
                 modelNumber = '${modelNumber}',
-                purchasedate = '${purchasedate}',
+                
                 quantity = '${quantity}',
                 categoryid = '${categoryid}',
                 supplierid = '${supplierid}'

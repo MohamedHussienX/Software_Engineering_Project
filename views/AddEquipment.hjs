@@ -43,6 +43,13 @@
             <input type="text" id="mn" name="mname" class="form-control" placeholder="Model Number" required>
           </div>
         </div>
+         <!-- Purchase Date -->
+        <div class="form-group row">
+          <label for="mn" class="col-sm-2 col-form-label">Purchase Date</label>
+          <div class="col-sm-10">
+            <input type="date" id="pd" name="pname" class="form-control" placeholder="Purchasedate"value="{{purchasedate}}" required>
+          </div>
+        </div>
         
         <!-- Quantity -->
         <div class="form-group row">
