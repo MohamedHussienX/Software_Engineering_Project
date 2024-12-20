@@ -6,6 +6,7 @@ $(document).ready(function() {
         let equipmentName = $('#en').val();
         let equipmentImgPath = $('#picture')[0].files[0];
         let modelNumber = $('#mn').val();
+        let purchasedate = $('#pd').val();
         let quantity = $('#q').val();
         let status = $('#s').val();
         let location = $('#l').val();
@@ -34,6 +35,7 @@ $(document).ready(function() {
             equipmentName,
             specificFileName,
             modelNumber,
+            purchasedate,
             quantity,
             status,
             location,
@@ -42,7 +44,7 @@ $(document).ready(function() {
         };
 
         $.ajax({
-            type: "PUT",
+            type: "POST",
             url: '/api/v1/equipment/new',
             contentType: 'application/json', // Set content type to JSON
             data: JSON.stringify(content), // Convert content to JSON string
@@ -52,6 +54,7 @@ $(document).ready(function() {
          $('#en').val('');
          $('#picture').val('');
          $('#mn').val('');
+         $('#pd').val('');
          $('#q').val('');
          $('#s').val('');
          $('#l').val('');

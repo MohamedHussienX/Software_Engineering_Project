@@ -3,9 +3,10 @@ $(document).ready(function() {
         event.preventDefault(); // Prevent default form submission if inside a form
         console.log('Added');
         const formData = new FormData();
-        let equipmentid=$('#add').attr('name')
+        let equipmentid=parseInt($('#add').attr('name'))
         console.log(equipmentid)
         let equipmentName = $('#en').val();
+        console.log(equipmentName)
         let equipmentImgPath = $('#picture')[0].files[0];
         let modelNumber = $('#mn').val();
         let quantity = $('#q').val();
@@ -46,21 +47,21 @@ $(document).ready(function() {
         };
 
         $.ajax({
-            type: "POST",
+            type: "PUT",
             url: `/api/v1/equipment/${equipmentid}`,
             contentType: 'application/json', // Set content type to JSON
             data: JSON.stringify(content), // Convert content to JSON string
             success: function(data) {
-                console.log(`Added ${data}`); // Corrected string interpolation
-                alert("Added Successfully");
-         $('#en').val('');
-         $('#picture').val('');
-         $('#mn').val('');
-         $('#q').val('');
-         $('#s').val('');
-         $('#l').val('');
-         $('#cid').val('');
-         $('#sid').val('');
+                console.log(`Edited ${data}`); // Corrected string interpolation
+                alert("Edited Successfully");
+        //  $('#en').val('');
+        //  $('#picture').val('');
+        //  $('#mn').val('');
+        //  $('#q').val('');
+        //  $('#s').val('');
+        //  $('#l').val('');
+        //  $('#cid').val('');
+        //  $('#sid').val('');
             },
             error: function(data) {
                 console.log("Error message:", data.responseText);

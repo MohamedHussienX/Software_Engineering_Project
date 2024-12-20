@@ -21,7 +21,8 @@ function handlePrivateFrontEndView(app) {
     e.location, 
     e.categoryid, 
     e.supplierid,
-    o.date AS order_date  -- Adding the order date from the orders table
+    o.date AS order_date, -- Adding the order date from the orders table
+    o.orderid             -- Adding the order ID from the orders table
 FROM 
     project.equipments e 
 INNER JOIN 
@@ -33,7 +34,8 @@ INNER JOIN
 WHERE 
     o.userid = ${u.userId}
 ORDER BY 
-    o.date DESC;  -- Ordering by the date of the orders from newest to oldest
+    o.date ASC;  -- Ordering by the date of the orders from newest to oldest
+
 
  `);
         }catch(error){

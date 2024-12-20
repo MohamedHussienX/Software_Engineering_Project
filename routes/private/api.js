@@ -121,10 +121,10 @@ WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
     }
     try{
       console.log("req",req.body);
-      const {equipmentName, specificFileName, modelNumber,quantity,status,location,categoryid,supplierid} = req.body 
+      const {equipmentName, specificFileName, modelNumber,purchasedate,quantity,status,location,categoryid,supplierid} = req.body 
       const result = await db.raw(
-        `insert into "project"."equipments"(equipmentname, equipmentimgpath,modelnumber,quantity,status,location,categoryid,supplierid)
-          values('${equipmentName}','${specificFileName}','${modelNumber}','${quantity}','${status}','${location}','${categoryid}','${supplierid}');`);
+        `insert into "project"."equipments"(equipmentname, equipmentimgpath,modelnumber,purchasedate,quantity,status,location,categoryid,supplierid)
+          values('${equipmentName}','${specificFileName}','${modelNumber}','${purchasedate}','${quantity}','${status}','${location}','${categoryid}','${supplierid}');`);
       return res.status(200).send('new equipment has successfully added')
     }catch(err){
       console.log("error message", err.message);
@@ -246,16 +246,14 @@ WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
           return res.status(400).send("Invalid equipmentid");
       }
       // const {equipmentid}=parseInt(req.params.id);
-      const {equipmentname, equipmentimgpath, rating, modelNumber,purchasedate,quantity,categoryid,supplierid}=req.body;
+      const {equipmentName, specificFileName, rating, modelNumber,purchasedate,quantity,categoryid,supplierid}=req.body;
       console.log(req.body);
 
       const query=`UPDATE "project"."equipments"
                  SET
-                equipmentname = '${equipmentname}',
-                equipmentimgpath = '${equipmentimgpath}',
-                rating = '${rating}',
+                equipmentname = '${equipmentName}',
+                equipmentimgpath = '${specificFileName}',
                 modelNumber = '${modelNumber}',
-                purchasedate = '${purchasedate}',
                 quantity = '${quantity}',
                 categoryid = '${categoryid}',
                 supplierid = '${supplierid}'
@@ -267,7 +265,7 @@ WHERE c.userID = '${u.userId}' AND e.isDeleted = FALSE;
        if(res.rowcount===0){
         return res.status(404).send("Equipment not found");
        }
-       return res.status(200).send("updated successfully;");
+       return res.status(200).send("Updated successfully;");
     }
 
     catch(err){
