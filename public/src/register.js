@@ -2,12 +2,12 @@ $(document).ready(function(){
 
     // Handle Registration Button Click
     $("#register").click(function() {
-      const name = $('#name').val();
+      const username = $('#name').val();
       const email = $('#email').val();
       const password = $('#password').val();
 
       const data = {
-        name,
+        username,
         email,
         password,
       };
