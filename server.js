@@ -46,13 +46,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
 });
 
 
-app.listen(3000, () => {
+app.listen(3000,() => {
     console.log("Server is now listening at port 3000 on http://localhost:3000/");
 });
-
-
-
-
-
-
-
